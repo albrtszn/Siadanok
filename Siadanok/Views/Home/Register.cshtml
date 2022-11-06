@@ -1,0 +1,48 @@
+﻿@page
+@using DataBase.Entity;
+@using Siadanok.Services
+@model Service
+
+@functions{
+    private string FirstName { get; set; }
+    private string SecondName { get; set; }
+    public string Message;
+
+    public void OnGet()
+    {
+        Message = "Зарагистрируйтесь пожалуйста";
+    }
+    public void OnPost(string number, string firstName, string secondName)
+    {
+        //if (number.Length!=0 && firstName.Length != 0 && secondName.Length != 0)
+        //{
+            Model.SaveUser(new User() { FirstName=firstName, SecondName=secondName });
+            Message = "Регистрация успешна";
+        //}
+        //else
+        //{
+            Message = "Ошибка при регистрации";
+        //}
+        }
+}
+<form action="/Home/Register" method="post">
+        <table>
+                <tr>
+                    <td>Имя:</td>
+                    <td><input type="text" name="FirstName" value=""/> </td>
+                </tr>
+                <tr>
+                    <td>Фамилия:</td>
+                    <td><input type="text" name="SecondName" value=""/></td>
+                </tr>
+                <tr>
+                    <td>Номер:</td>
+                    <td><input type="text" name="Number" value=""/></td>
+                </tr>
+                <tr>
+                    <td>Пароль:</td>
+                    <td><input type="text" name="Password" value=""/></td>
+                </tr>
+                <tr><td><input type="submit"/> </td><td></td></tr>
+            </table>
+        </form>

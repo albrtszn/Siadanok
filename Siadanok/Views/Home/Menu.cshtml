@@ -1,0 +1,109 @@
+﻿@using DataBase.Entity
+@using System.Drawing
+@model List<Item>
+@{
+
+}
+@{
+    ViewData["Title"] = "Menu Page";
+}
+@functions{
+    public Image ByteArrayToImage(byte[] byteArrayIn)
+    {
+        using (var ms = new MemoryStream(byteArrayIn))
+        {
+            var returnImage = Image.FromStream(ms);
+
+            return returnImage;
+        }
+    }
+}
+<style>
+        .con {
+        }
+        .con div {
+            display: inline-block;
+            width: 300px;
+            height: auto;
+        }
+
+        .product-item {
+            width: 300px;
+            text-align: center;
+            margin: 0 20px 20px 0; /* Отступы */
+            vertical-align: top; /* Выравнивание по верхнему краю */
+            border-bottom: 4px solid #F5F5F5;
+            font-family: "Open Sans";
+            transition: .3s ease-in;
+        }
+
+        .product-item:hover {
+            border-bottom: 4px solid #fc5a5a;
+        }
+
+        .product-item img {
+            width: 100%;
+        }
+
+        .product-list {
+            background: #fafafa;
+            padding: 15px 0;
+        }
+
+        .product-list h3 {
+            font-size: 18px;
+            font-weight: 400;
+            color: #444444;
+            margin: 0 0 10px 0;
+        }
+
+        .price {
+            font-size: 16px;
+            color: #fc5a5a;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .button {
+            text-decoration: none;
+            display: inline-block;
+            padding: 0 12px;
+            background: #cccccc;
+            color: white;
+            text-transform: uppercase;
+            font-size: 12px;
+            line-height: 28px;
+            transition: .3s ease-in;
+        }
+
+        .product-item:hover .button {
+            background: #fc5a5a;
+        }
+    </style>
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Menu</h1>
+</div>
+
+ <div class="con">
+            @foreach (var item in Model)
+            {
+             <div class="product-item">
+                 @{
+                    var base64 = Convert.ToBase64String(item.Picture);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                 }
+                <img src="@imgSrc">
+             <div class="product-list">
+                <h3>@item.Name</h3>
+                <h3>@item.Descryption</h3>
+                <h3>@item.Type</h3>
+                <h3>@item.IsExotic</h3>
+                <span class="price">@item.Price USDT</span>
+                <a href="" class="button">В корзину</a>
+            </div>
+            </div>
+            }
+            
+  </div>
