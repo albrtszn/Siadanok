@@ -1,11 +1,9 @@
-﻿using CRUD;
-using CRUD.Implementation;
-using DataBase;
-using DataBase.Entity;
+﻿using DataBase.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Siadanok.Models;
 using Siadanok.Services;
 using System.Diagnostics;
+using System.Net;
 
 namespace Siadanok.Controllers
 {
@@ -23,6 +21,14 @@ namespace Siadanok.Controllers
 
         public IActionResult Index()
         {
+            if (Request.Cookies["userId"]!=null)
+            {
+                ViewBag.message = Request.Cookies["userId"];
+            }
+            else
+            {
+                ViewBag.message = "Cookies are empty";
+            }
             return View();
         }
         [HttpGet]
@@ -34,6 +40,11 @@ namespace Siadanok.Controllers
         public IActionResult Register(User userToSave)
         {
             service.SaveUser(userToSave);
+            //create a cookie
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTimeOffset.Now.AddHours(12);
+            Response.Cookies.Append("userId",userToSave.Id.ToString(), option);
+            //HttpCookie userCookies = new HttpCookie();
             return RedirectToAction("Index","Home");
         }
 
