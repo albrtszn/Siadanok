@@ -13,6 +13,7 @@ namespace DataBase
     {
         public DbSet<User> userRepo { get; set; }
         public DbSet<Item> itemRepo { get; set; }
+        public DbSet<CartItem> cartItemsRepo { get; set; }
 
         public EFDBContext(DbContextOptions<EFDBContext> options) : base(options) { }
 

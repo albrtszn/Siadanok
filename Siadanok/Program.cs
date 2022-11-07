@@ -18,6 +18,17 @@ builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<DataManager>();
 builder.Services.AddScoped<Service>();
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "SessionId";
+    //options.Cookie.Expiration = 
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -44,6 +55,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+//Session
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
