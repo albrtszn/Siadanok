@@ -1,9 +1,11 @@
 ﻿using DataBase.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Siadanok.Models;
 using Siadanok.Services;
 using System.Diagnostics;
 using System.Net;
+using System.Xml.Linq;
 
 namespace Siadanok.Controllers
 {
@@ -67,7 +69,20 @@ namespace Siadanok.Controllers
             ViewBag.message = Request.Cookies["userId"];
             return View(service.GetAllItems());
         }
-        [HttpPost]
+        //[HttpPost]
+        public IActionResult addCartItem(int itemId,string userId)
+        {
+            if (Request.Cookies["SessionId"] == null)
+            {
+                //ViewBag.message = Request.Cookies["userId"];
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTimeOffset.Now.AddHours(1);
+                Response.Cookies.Append("SessionId", Guid.NewGuid().ToString(), option);
+            }
+            service.SaveItem(userId,itemId);
+            return Redirect("Menu");
+        }
+        /*[HttpPost]
         public IActionResult Menu(int itemId)
         {
             if (Request.Cookies["SessionId"] == null)
@@ -79,7 +94,7 @@ namespace Siadanok.Controllers
             }
              ViewBag.message = Request.Cookies["userId"];
             return View();
-        }
+        }*/
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

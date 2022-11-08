@@ -15,6 +15,7 @@ builder.Services.AddDbContext<EFDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
+builder.Services.AddTransient<ICartItemRepository, CartItemRepository>();
 builder.Services.AddScoped<DataManager>();
 builder.Services.AddScoped<Service>();
 

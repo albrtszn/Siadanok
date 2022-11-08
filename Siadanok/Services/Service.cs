@@ -48,10 +48,35 @@ namespace Siadanok.Services
         {
             return dataManager.Item.GetById(id);
         }
-
         public void SaveItem(Item itemToSave)
         {
             dataManager.Item.SaveItem(itemToSave);
+        }
+        /*
+         *  CartItem Logic 
+         */
+        public IEnumerable<CartItem> GetAllCartItems()
+        {
+            return dataManager.Cart.GetAllCartItems();
+        }
+        public void DeleteItem(CartItem cartItemToDelete)
+        {
+            dataManager.Cart.DeleteItem(cartItemToDelete);
+        }
+        public CartItem GetCartItemById(int id)
+        {
+            return dataManager.Cart.GetById(id);
+        }
+        public void SaveItem(CartItem cartItemToSave)
+        {
+            dataManager.Cart.SaveItem(cartItemToSave);
+        }
+        public void SaveItem(string userId, int itemId)
+        {
+            User user = GetUserById(userId);
+            Item item = GetItemById(itemId);
+            Console.WriteLine($"userId={0}, itemId={1}",userId, itemId);
+            dataManager.Cart.SaveItem(new CartItem() { UserId=user.Id, ItemId=item.Id });
         }
     }
 }

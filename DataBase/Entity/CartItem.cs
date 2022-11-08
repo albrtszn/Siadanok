@@ -9,9 +9,7 @@ namespace DataBase.Entity
     public class CartItem
     {
         public int Id { get; set; }
-        public Item item { get; set; }
-        public int count { get; set; }
-
-        public string Cartid { get; set; }
+        public string UserId { get; set; }
+        public int ItemId { get; set; }
     }
 }

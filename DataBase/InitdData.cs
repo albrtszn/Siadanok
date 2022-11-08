@@ -32,6 +32,8 @@ namespace DataBase
         }
         public static void Init(EFDBContext context)
         {
+            //context.cartItemsRepo.EnsureDeleted(,);
+            //context.Database.EnsureCreated();
             if(!context.userRepo.Any()){
                 context.userRepo.Add(new User() { Id=Guid.NewGuid().ToString(),Number= "+37543638-66-66", Password=Base64Encode("Password1234"), FirstName ="Dexter", SecondName="Horn"});
                 context.SaveChanges();
