@@ -30,7 +30,7 @@ namespace Siadanok.Controllers
             }
             else
             {
-                ViewBag.message = "Cookies are empty";
+                //ViewBag.message = "Cookies are empty";
             }
 
             /*if (string.IsNullOrEmpty(HttpContext.Session.GetString("SessionId")))
@@ -57,6 +57,35 @@ namespace Siadanok.Controllers
             Response.Cookies.Append("userId", userToSave.Id.ToString(), option);
             //HttpCookie userCookies = new HttpCookie();
             return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Login(LoginModel loginModel)
+        {
+            //User? user = service.GetAllUsers().FirstOrDefault(x => x.Number.Equals(loginModel.Login));
+            IEnumerable<User> list = service.GetAllUsers();
+            User user =  new User();
+            foreach (User buffer in list)
+            {
+                Console.WriteLine(buffer.Number);
+                if (buffer.Number.Equals(loginModel.Login))
+                {
+                    user = buffer;
+                }
+            }
+            Console.WriteLine($"{user.Id},{user.Password}");
+            if (Service.Base64Decode(user.Password) == loginModel.Password)
+            {
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTimeOffset.Now.AddHours(12);
+                Response.Cookies.Append("userId", user.Id.ToString(), option);
+                ViewBag.message = Request.Cookies["userId"];
+            }
+            return View();
         }
 
         public IActionResult Privacy()

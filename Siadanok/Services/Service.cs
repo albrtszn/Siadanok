@@ -1,5 +1,6 @@
 ﻿using CRUD;
 using DataBase.Entity;
+using System.Drawing;
 
 namespace Siadanok.Services
 {
@@ -14,6 +15,28 @@ namespace Siadanok.Services
             this.logger = logger;
         }
         /*
+         *  Convert Logic
+         */
+        private static byte[] ImageToByteArray(string path)
+        {
+            Image pic = Image.FromFile(path);
+            using (var ms = new MemoryStream())
+            {
+                pic.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                return ms.ToArray();
+            }
+        }
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+        /*
          *  User Logic
          */
         public IEnumerable<User> GetAllUsers()
@@ -25,8 +48,10 @@ namespace Siadanok.Services
             dataManager.User.DeleteUser(userToDelete);
         }
         public User GetUserById(string id)
-        {
-            return dataManager.User.GetById(id);
+        {   
+            User user = dataManager.User.GetById(id);
+            user.Password = Base64Decode(user.Password);
+            return user;
         }
         public void SaveUser(User userToSave)
         {
