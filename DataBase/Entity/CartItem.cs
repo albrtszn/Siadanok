@@ -8,7 +8,7 @@ namespace DataBase.Entity
 {
     public class CartItem
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string UserId { get; set; }
         public int ItemId { get; set; }
     }

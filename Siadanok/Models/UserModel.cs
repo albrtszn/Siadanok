@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using DataBase.Entity;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Siadanok.Models
 {
     public class UserModel
-    { 
-        private string FirstName { get; set; }
-        private string SecondName { get; set; }
-        public string Message;
-       
+    {
+        public string Number { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string SecondName { get; set; }
+        public List<Item>? ListItems { get; set; }
+
     }
 }

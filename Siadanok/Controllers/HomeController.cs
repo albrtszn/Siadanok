@@ -1,4 +1,5 @@
 ﻿using DataBase.Entity;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Siadanok.Models;
@@ -68,7 +69,7 @@ namespace Siadanok.Controllers
         {
             //User? user = service.GetAllUsers().FirstOrDefault(x => x.Number.Equals(loginModel.Login));
             IEnumerable<User> list = service.GetAllUsers();
-            User user =  new User();
+            User user = new User();
             foreach (User buffer in list)
             {
                 Console.WriteLine(buffer.Number);
@@ -99,7 +100,7 @@ namespace Siadanok.Controllers
             return View(service.GetAllItems());
         }
         //[HttpPost]
-        public IActionResult addCartItem(int itemId,string userId)
+        public IActionResult addCartItem(int itemId, string userId)
         {
             if (Request.Cookies["SessionId"] == null)
             {
@@ -108,8 +109,32 @@ namespace Siadanok.Controllers
                 option.Expires = DateTimeOffset.Now.AddHours(1);
                 Response.Cookies.Append("SessionId", Guid.NewGuid().ToString(), option);
             }
-            service.SaveItem(userId,itemId);
+            service.AddCartItem(userId, itemId);
+            //service.SaveItem(userId,itemId);
             return Redirect("Menu");
+        }
+        public IActionResult deleteCartItem(int itemId, string userId)
+        {
+            service.DeleteCartItem(userId,itemId);
+            return Redirect("Cart");
+        }
+        public IActionResult buyItems(string userId)
+        {
+
+            service.BuyItems(userId);
+            return Redirect("Account");
+        }
+        [HttpGet]
+        public IActionResult Account(string userId)
+        {
+            ViewBag.message = Request.Cookies["userId"];
+            return View(service.GetUserModel(Request.Cookies["userId"]));
+        }
+        [HttpGet]
+        public IActionResult Cart(string userId)
+        {
+            ViewBag.message = Request.Cookies["userId"];
+            return View(service.GetCartItems(Request.Cookies["userId"]));
         }
         /*[HttpPost]
         public IActionResult Menu(int itemId)

@@ -1,0 +1,47 @@
+﻿@using DataBase.Entity
+@using System.Drawing
+@model List<Item>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@functions {
+    public Image ByteArrayToImage(byte[] byteArrayIn)
+    {
+        using (var ms = new MemoryStream(byteArrayIn))
+        {
+            var returnImage = Image.FromStream(ms);
+
+            return returnImage;
+        }
+    }
+
+}
+
+<div class="text-center">
+    <h1 class="display-4">Menu</h1>
+</div>
+
+<div class="con">
+    <h3>userId: @ViewBag.message</h3>
+    @foreach (var item in Model)
+    {
+        <div class="product-item">
+            @{
+                var base64 = Convert.ToBase64String(item.Picture);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
+            <img src="@imgSrc">
+            <div class="product-list">
+                <h3>@item.Name</h3>
+                <h3>@item.Id</h3>
+                <h3>@item.Descryption</h3>
+                <h3>@item.Type</h3>
+                <h3>@item.IsExotic</h3>
+                <span class="price">@item.Price USDT</span>
+                <a asp-controller="Home" asp-action="deleteCartItem" asp-route-itemId=@item.Id asp-route-userId=@ViewBag.message class="button">Удалить из корзины</a>
+            </div>
+        </div>
+    }
+    <a asp-controller="Home" asp-action="buyItems" asp-route-userId=@ViewBag.message class="button">Оплатить товары</a>
+
+</div>
