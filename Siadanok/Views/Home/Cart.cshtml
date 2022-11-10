@@ -38,10 +38,10 @@
                 <h3>@item.Type</h3>
                 <h3>@item.IsExotic</h3>
                 <span class="price">@item.Price USDT</span>
-                <a asp-controller="Home" asp-action="deleteCartItem" asp-route-itemId=@item.Id asp-route-userId=@ViewBag.message class="button">Удалить из корзины</a>
+                <a asp-controller="Home" asp-action="deleteCartItem" asp-route-itemId=@item.Id class="button">Удалить из корзины</a>
             </div>
         </div>
     }
-    <a asp-controller="Home" asp-action="buyItems" asp-route-userId=@ViewBag.message class="button">Оплатить товары</a>
+    <a asp-controller="Home" asp-action="buyItems" class="button">Оплатить товары</a>
 
 </div>

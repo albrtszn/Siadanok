@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using Siadanok.Models;
 using Siadanok.Services;
 using System.Diagnostics;
@@ -54,8 +55,9 @@ namespace Siadanok.Controllers
             service.SaveUser(userToSave);
             //create a cookie
             CookieOptions option = new CookieOptions();
-            option.Expires = DateTimeOffset.Now.AddHours(12);
+            option.Expires = DateTimeOffset.Now.AddHours(1);
             Response.Cookies.Append("userId", userToSave.Id.ToString(), option);
+            //Response.Cookies.Append("cart", "", option);
             //HttpCookie userCookies = new HttpCookie();
             return RedirectToAction("Index", "Home");
         }
@@ -82,8 +84,9 @@ namespace Siadanok.Controllers
             if (Service.Base64Decode(user.Password) == loginModel.Password)
             {
                 CookieOptions option = new CookieOptions();
-                option.Expires = DateTimeOffset.Now.AddHours(12);
+                option.Expires = DateTimeOffset.Now.AddHours(1);
                 Response.Cookies.Append("userId", user.Id.ToString(), option);
+                Response.Cookies.Append("cart", "", option);
                 ViewBag.message = Request.Cookies["userId"];
             }
             return View();
@@ -100,55 +103,61 @@ namespace Siadanok.Controllers
             return View(service.GetAllItems());
         }
         //[HttpPost]
-        public IActionResult addCartItem(int itemId, string userId)
+        public IActionResult addCartItem(int itemId)
         {
-            if (Request.Cookies["SessionId"] == null)
+            if (Request.Cookies["cart"]==null)
             {
+                List<CartItem> listCart = new List<CartItem>();
+                listCart.Add(new CartItem() { ItemId = itemId, UserId = Request.Cookies["userId"] });
+                Response.Cookies.Append("cart", JsonConvert.SerializeObject(listCart));
                 //ViewBag.message = Request.Cookies["userId"];
-                CookieOptions option = new CookieOptions();
+                /*CookieOptions option = new CookieOptions();
                 option.Expires = DateTimeOffset.Now.AddHours(1);
-                Response.Cookies.Append("SessionId", Guid.NewGuid().ToString(), option);
+                Response.Cookies.Append("SessionId", Guid.NewGuid().ToString(), option);*/
             }
-            service.AddCartItem(userId, itemId);
+            else
+            {
+                List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
+                listCart.Add(new CartItem() { ItemId=itemId, UserId= Request.Cookies["userId"] });
+                Response.Cookies.Append("cart", JsonConvert.SerializeObject(listCart));
+            }
+            //service.AddCartItem(userId, itemId);
             //service.SaveItem(userId,itemId);
             return Redirect("Menu");
         }
-        public IActionResult deleteCartItem(int itemId, string userId)
+        public IActionResult deleteCartItem(int itemId)
         {
-            service.DeleteCartItem(userId,itemId);
+            List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
+            CartItem cartItemToDelete = listCart.First(x=>x.ItemId.Equals(itemId));
+            listCart.Remove(cartItemToDelete);
+            Response.Cookies.Append("cart", JsonConvert.SerializeObject(listCart));
             return Redirect("Cart");
         }
-        public IActionResult buyItems(string userId)
+        public IActionResult buyItems()
         {
-
-            service.BuyItems(userId);
-            return Redirect("Account");
+            List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
+            foreach (CartItem cartItem in listCart)
+            {
+                service.SaveItem(cartItem);
+            }
+            Response.Cookies.Delete("cart");
+            return Redirect("/");
         }
         [HttpGet]
-        public IActionResult Account(string userId)
+        public IActionResult Account()
         {
             ViewBag.message = Request.Cookies["userId"];
             return View(service.GetUserModel(Request.Cookies["userId"]));
         }
         [HttpGet]
-        public IActionResult Cart(string userId)
+        public IActionResult Cart()
         {
             ViewBag.message = Request.Cookies["userId"];
-            return View(service.GetCartItems(Request.Cookies["userId"]));
+            List<CartItem>? listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
+            return View(service.GetItemsByCartItems(listCart)); ;
         }
-        /*[HttpPost]
-        public IActionResult Menu(int itemId)
-        {
-            if (Request.Cookies["SessionId"] == null)
-            {
-                //ViewBag.message = Request.Cookies["userId"];
-                CookieOptions option = new CookieOptions();
-                option.Expires = DateTimeOffset.Now.AddHours(1);
-                Response.Cookies.Append("SessionId", Guid.NewGuid().ToString(), option);
-            }
-             ViewBag.message = Request.Cookies["userId"];
-            return View();
-        }*/
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
