@@ -1,14 +1,35 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataBase.Entity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Siadanok.Services;
 
 namespace Siadanok.Controllers
 {
     public class JsonApi : Controller
     {
+        private readonly ILogger<HomeController> logger;
+        private Service service;
+        public JsonApi(Service service,
+                       ILogger<HomeController> logger)
+        {
+            this.service = service;
+            this.logger = logger;
+        }
         // GET: JsonApi
         public JsonResult Index()
         {
             return Json("Test response!");
+        }
+
+        public string Login(string login, string password)
+        {
+            logger.LogInformation($"Try to login -> login={login}, password={password}");
+            User? user = service.GetAllUsers().ToList().Find(x=>x.Number.Equals(login));
+            
+            if (user != null && password.Equals(user.Password))
+                return user.Id;
+            else
+                return "unsuccesful login";
         }
 
         // GET: JsonApi/Details/5
