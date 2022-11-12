@@ -1,6 +1,7 @@
 ﻿using DataBase.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Siadanok.Services;
 
 namespace Siadanok.Controllers
@@ -32,6 +33,24 @@ namespace Siadanok.Controllers
                 return "unsuccesful login";
         }
 
+        public string Register(string number, string password,
+                               string firstName, string secondName)
+        {
+            logger.LogInformation($"Try to register -> number={number}, password={password}, firstName={firstName}, secondName={secondName}");
+            if (!number.Equals("") && !password.Equals("") && !firstName.Equals("") && !secondName.Equals(""))
+            {
+                string userId = Guid.NewGuid().ToString();
+                service.SaveUser(new DataBase.Entity.User() { Id = userId, Number = number, Password = password, FirstName = firstName, SecondName = secondName });
+                return userId;
+            }
+            else
+                return "unsuccesful register";
+        }
+
+        public string Menu()
+        {
+            return JsonConvert.SerializeObject(service.GetAllItems().ToList());
+        }
         // GET: JsonApi/Details/5
         public ActionResult Details(int id)
         {

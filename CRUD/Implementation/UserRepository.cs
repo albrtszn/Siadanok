@@ -42,18 +42,27 @@ namespace CRUD.Implementation
 
         public void SaveUser(User userToSave)
         {
-            bool check = false;
-            while(!check)
+            if (userToSave.Id == null)
             {
-                userToSave.Id = Guid.NewGuid().ToString();
-                if (GetById(userToSave.Id)==null)
+                bool check = false;
+                while (!check)
                 {
-                    userToSave.Password = Base64Encode(userToSave.Password);
-                    context.userRepo.Add(userToSave);
-                    context.SaveChanges();
-                    check = true;   
+                    userToSave.Id = Guid.NewGuid().ToString();
+                    if (GetById(userToSave.Id) == null)
+                    {
+                        userToSave.Password = Base64Encode(userToSave.Password);
+                        context.userRepo.Add(userToSave);
+                        context.SaveChanges();
+                        check = true;
+                    }
                 }
             }
+            else
+            {
+                context.userRepo.Add(userToSave);
+                context.SaveChanges();
+            }
+
         }
         public void DropTable()
         {
