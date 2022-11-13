@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Siadanok.Models;
 using Siadanok.Services;
 
 namespace Siadanok.Controllers
@@ -16,6 +17,7 @@ namespace Siadanok.Controllers
             this.service = service;
             this.logger = logger;
         }
+
         // GET: JsonApi
         public JsonResult Index()
         {
@@ -46,6 +48,29 @@ namespace Siadanok.Controllers
             else
                 return "unsuccesful register";
         }
+
+        [HttpPost]
+        public async Task<string> CartAsync(DeliveryOrderModel deliveryOrderModel)
+        {
+            string body = "";
+            using (StreamReader stream = new StreamReader(Request.Body))
+            {
+                body = await stream.ReadToEndAsync();
+            }
+            logger.LogInformation($"body={body}");
+            DeliveryOrderModel d = JsonConvert.DeserializeObject<DeliveryOrderModel>(body);
+            if (d != null) {
+                logger.LogInformation($"Delivery: date={d.Date}, userId={d.UserId}" +
+                                      $" cartId={d.CartId}, items={d.Items.Count} " +
+                                      $" city={d.City}, street={d.Street}, " +
+                                      $"building={d.Building}, apartment={d.Appartment}");
+                return "succesful buy";
+            }
+            else
+                return "error while buying";
+        }
+
+
 
         public string Menu()
         {
