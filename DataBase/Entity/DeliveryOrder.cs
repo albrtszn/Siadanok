@@ -12,19 +12,13 @@ namespace DataBase.Entity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string Id;
-        [Required]
-        public string Date;
-        [Required]
-        public string UserId;
-        [Required]
-        public string CartId;
-        [Required]
-        public string City;
-        [Required]
-        public string Street;
-        [Required]
-        public string Building;
-        public string? Apartment;
+        public string OrderId { get; set; }
+        public string Date { get; set; }
+        public string User { get; set; }
+        public string Cart { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
+        public string Building { get; set; }
+        public string? Apartment { get; set; }
     }
 }

@@ -86,7 +86,7 @@ namespace Siadanok.Controllers
                 CookieOptions option = new CookieOptions();
                 option.Expires = DateTimeOffset.Now.AddHours(1);
                 Response.Cookies.Append("userId", user.Id.ToString(), option);
-                Response.Cookies.Append("cart", "", option);
+                Response.Cookies.Append("cart", null, option);
                 ViewBag.message = Request.Cookies["userId"];
             }
             return View();
@@ -105,7 +105,7 @@ namespace Siadanok.Controllers
         //[HttpPost]
         public IActionResult addCartItem(int itemId)
         {
-            if (Request.Cookies["cart"]==null)
+            if (Request.Cookies["cart"] == null)
             {
                 List<CartItem> listCart = new List<CartItem>();
                 listCart.Add(new CartItem() { ItemId = itemId, UserId = Request.Cookies["userId"] });
@@ -153,8 +153,13 @@ namespace Siadanok.Controllers
         public IActionResult Cart()
         {
             ViewBag.message = Request.Cookies["userId"];
-            List<CartItem>? listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
-            return View(service.GetItemsByCartItems(listCart)); ;
+            if (Request.Cookies["cart"] != null) {
+                
+                List<CartItem>? listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
+                return View(service.GetItemsByCartItems(listCart));
+            }
+            else
+                return View();
         }
 
 

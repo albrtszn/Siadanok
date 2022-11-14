@@ -14,6 +14,7 @@ namespace DataBase
         public DbSet<User> userRepo { get; set; }
         public DbSet<Item> itemRepo { get; set; }
         public DbSet<CartItem> cartItemsRepo { get; set; }
+        public DbSet<DeliveryOrder> deliveryOrderRepo { get; set; }
 
         public EFDBContext(DbContextOptions<EFDBContext> options) : base(options) { }
 
@@ -24,7 +25,7 @@ namespace DataBase
         public EFDBContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<EFDBContext>();
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SiadanokDb1;Trusted_Connection=True;MultipleActiveResultSets=true", x => x.MigrationsAssembly("DataBase"));
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SiadanokDb;Trusted_Connection=True;MultipleActiveResultSets=true", x => x.MigrationsAssembly("DataBase"));
             return new EFDBContext(optionsBuilder.Options);
         }
     }

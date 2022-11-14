@@ -16,6 +16,7 @@ builder.Services.AddDbContext<EFDBContext>(options =>
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<ICartItemRepository, CartItemRepository>();
+builder.Services.AddTransient<IDeliveryOrderRepository, DeliveryOrderRepository>();
 builder.Services.AddScoped<DataManager>();
 builder.Services.AddScoped<Service>();
 

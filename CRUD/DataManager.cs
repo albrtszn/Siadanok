@@ -13,14 +13,18 @@ namespace CRUD
         private IItemRepository itemRepository;
         private IUserRepository userRepository;
         private ICartItemRepository cartItemRepository;
-        public DataManager(IUserRepository _userRepository, IItemRepository _itemRepository, ICartItemRepository _cartItemRepository)
+        private IDeliveryOrderRepository deliveryOrderRepository;
+        public DataManager(IUserRepository _userRepository, IItemRepository _itemRepository,
+                           ICartItemRepository _cartItemRepository, IDeliveryOrderRepository deliveryOrderRepository)
         {
             this.userRepository = _userRepository;
             this.itemRepository = _itemRepository;
             this.cartItemRepository = _cartItemRepository;
+            this.deliveryOrderRepository = deliveryOrderRepository;
         }
         public IItemRepository Item { get { return itemRepository; } }
         public IUserRepository User { get { return userRepository; } }
         public ICartItemRepository Cart { get { return cartItemRepository; } }
+        public IDeliveryOrderRepository Delivery { get { return deliveryOrderRepository; } }
     }
 }
