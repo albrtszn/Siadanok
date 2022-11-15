@@ -17,14 +17,79 @@
 
 }
 
+<style>
+    .con {
+    }
+
+        .con div {
+            display: inline-block;
+            width: 300px;
+            height: auto;
+        }
+
+    .product-item {
+        width: 300px;
+        text-align: center;
+        margin: 0 20px 20px 0; /* Отступы */
+        vertical-align: top; /* Выравнивание по верхнему краю */
+        border-bottom: 4px solid #F5F5F5;
+        font-family: "Open Sans";
+        transition: .3s ease-in;
+    }
+
+        .product-item:hover {
+            border-bottom: 4px solid #fc5a5a;
+        }
+
+        .product-item img {
+            width: 100%;
+        }
+
+    .product-list {
+        background: #fafafa;
+        padding: 15px 0;
+    }
+
+        .product-list h3 {
+            font-size: 18px;
+            font-weight: 400;
+            color: #444444;
+            margin: 0 0 10px 0;
+        }
+
+    .price {
+        font-size: 16px;
+        color: #fc5a5a;
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .button {
+        text-decoration: none;
+        display: inline-block;
+        padding: 0 12px;
+        background: #cccccc;
+        color: white;
+        text-transform: uppercase;
+        font-size: 12px;
+        line-height: 28px;
+        transition: .3s ease-in;
+    }
+
+    .product-item:hover .button {
+        background: #fc5a5a;
+    }
+</style>
+</style>
+
 <div class="text-center">
     <h1 class="display-4">Menu</h1>
-</div>
 
-<div class="con">
     <h3>userId: @ViewBag.message</h3>
     @if (Model != null)
     {
+        <div class="con">
+
         @foreach (var item in Model)
         {
             <div class="product-item">
@@ -44,9 +109,15 @@
                 </div>
             </div>
         }
-        <a asp-controller="Home" asp-action="buyItems" class="button">Оплатить товары</a>
+        </div>
+        <a asp-controller="Home" asp-action="Order">
+        <div class="d-grid gap-2">
+                <button asp-controller="Home" asp-action="Order" class="btn btn-lg btn-primary" type="button">Оформить заказ</button>
+        </div>
+        </a>
     }else{
     <h3>Корзина пуста</h3>
     }
-
 </div>
+
+

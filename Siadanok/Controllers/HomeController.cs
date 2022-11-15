@@ -86,12 +86,11 @@ namespace Siadanok.Controllers
                 CookieOptions option = new CookieOptions();
                 option.Expires = DateTimeOffset.Now.AddHours(1);
                 Response.Cookies.Append("userId", user.Id.ToString(), option);
-                Response.Cookies.Append("cart", null, option);
+                //Response.Cookies.Append("cart", null, option);
                 ViewBag.message = Request.Cookies["userId"];
             }
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();
@@ -110,10 +109,6 @@ namespace Siadanok.Controllers
                 List<CartItem> listCart = new List<CartItem>();
                 listCart.Add(new CartItem() { ItemId = itemId, UserId = Request.Cookies["userId"] });
                 Response.Cookies.Append("cart", JsonConvert.SerializeObject(listCart));
-                //ViewBag.message = Request.Cookies["userId"];
-                /*CookieOptions option = new CookieOptions();
-                option.Expires = DateTimeOffset.Now.AddHours(1);
-                Response.Cookies.Append("SessionId", Guid.NewGuid().ToString(), option);*/
             }
             else
             {
@@ -121,23 +116,58 @@ namespace Siadanok.Controllers
                 listCart.Add(new CartItem() { ItemId=itemId, UserId= Request.Cookies["userId"] });
                 Response.Cookies.Append("cart", JsonConvert.SerializeObject(listCart));
             }
-            //service.AddCartItem(userId, itemId);
-            //service.SaveItem(userId,itemId);
             return Redirect("Menu");
         }
         public IActionResult deleteCartItem(int itemId)
         {
             List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
-            CartItem cartItemToDelete = listCart.First(x=>x.ItemId.Equals(itemId));
-            listCart.Remove(cartItemToDelete);
-            Response.Cookies.Append("cart", JsonConvert.SerializeObject(listCart));
+            if (listCart.Count == 1)
+            {
+                Response.Cookies.Delete("cart");
+            }
+            else
+            {
+                CartItem cartItemToDelete = listCart.First(x => x.ItemId.Equals(itemId));
+                listCart.Remove(cartItemToDelete);
+                Response.Cookies.Append("cart", JsonConvert.SerializeObject(listCart));
+            }
             return Redirect("Cart");
         }
+
+        [HttpGet]
+        public IActionResult Order()
+        {
+            ViewBag.message = Request.Cookies["userId"];
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Order(OrderModel model)
+        {
+            ViewBag.message = Request.Cookies["userId"];
+            logger.LogInformation($"New Order -> orderType={model.OrderType}, city={model.City}, street={model.Street}, building={model.Building}, appartment={model.Apartment}, comment={model.Comment}");
+            return View();
+        }
+        public IActionResult Order(ReserveOrderModel model)
+        {
+            ViewBag.message = Request.Cookies["userId"];
+            //logger.LogInformation($"New Order -> orderType={model.OrderType}, city={model.City}, street={model.Street}, building={model.Building}, appartment={model.Apartment}, comment={model.Comment}");
+            logger.LogInformation($"{model.Table}");
+            return View();
+        }
+        /*[HttpPost]
+        public IActionResult Order(ReserveOrderModel model)
+        {
+            ViewBag.message = Request.Cookies["userId"];
+            return View();
+        }*/
+
         public IActionResult buyItems()
         {
             List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
+            string cartId = Guid.NewGuid().ToString();
             foreach (CartItem cartItem in listCart)
             {
+                cartItem.CartId = cartId;
                 service.SaveItem(cartItem);
             }
             Response.Cookies.Delete("cart");

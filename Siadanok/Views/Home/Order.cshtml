@@ -1,0 +1,116 @@
+﻿@functions{
+
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function check() {
+        $("#choise1").hide();
+        $("#choise2").hide();
+    if (document.getElementById('btnradio1').checked == true) {
+        //Male radio button is checked
+            $("#choise2").hide();
+            $("#choise1").show();
+    } else if (document.getElementById('btnradio3').checked == true) {
+        //Female radio button is checked
+            //$("#choise").html('<p>200</p>');
+            $("#choise1").hide();
+            $("#choise2").show();
+    }
+    }
+    window.onload = check;
+</script>
+
+</br>
+<form action="/Home/Order" method="post" >
+    
+    <div class="card border-primary mb-3" style="max-width: 200rem;">
+        <div class="card-header">оформление заказа</div>
+        <div class="card-body">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input onclick="check()" type="radio" class="btn-check" name="OrderType" id="btnradio1" autocomplete="off" value="Delivery" checked="">
+                <label class="btn btn-outline-primary" for="btnradio1">  Доставка  </label>
+
+                <input onclick="check()" type="radio" class="btn-check" name="OrderType" id="btnradio3" autocomplete="off" value="Reserve" checked="">
+                <label class="btn btn-outline-primary" for="btnradio3">  Зарезервировать  </label>
+
+            </div>
+
+        </div>
+
+        <div id="choise1">
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label for="address" class="form-label">Город</label>
+                    <input name="City" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите город.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="address" class="form-label">Улица</label>
+                    <input name="Street" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите улицу.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="address" class="form-label">Номер дома/строения</label>
+                    <input name="Building" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите номер дома.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="address" class="form-label">Квартира</label>
+                    <input name="Apartment" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите номер квартиры.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="address2" class="form-label">Комментарий <span class="text-muted">(необязательно)</span></label>
+                    <input name="Comment" type="text" class="form-control" id="address2" placeholder="Apartment or suite" value="">
+                </div>
+
+
+            </div>
+        </div>
+
+        <div id="choise2">
+            <div class="row g-3">
+                <div class="card-body">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio4" autocomplete="off" value="1" checked="">
+                <label class="btn btn-outline-primary" for="btnradio4">  Стол 1  </label>
+
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio5" autocomplete="off" value="2" checked="">
+                <label class="btn btn-outline-primary" for="btnradio5">  Стол 2  </label>
+
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio6" autocomplete="off" value="2" checked="">
+                <label class="btn btn-outline-primary" for="btnradio6">  Стол 3  </label>
+
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio7" autocomplete="off" value="2" checked="">
+                <label class="btn btn-outline-primary" for="btnradio7">  Стол 4  </label>
+
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio8" autocomplete="off" value="2" checked="">
+                <label class="btn btn-outline-primary" for="btnradio8">  Стол 5  </label>
+                    </div>
+                </div>
+
+
+         
+
+            </div>
+
+            </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Оформить</button>
+
+        </div>
+        
+
+</form>

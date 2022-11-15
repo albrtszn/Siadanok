@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataBase.Entity
 {
-    internal class ReserveOrder
+    public class ReserveOrder
     {
     }
 }
