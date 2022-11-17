@@ -144,7 +144,9 @@ namespace Siadanok.Controllers
         public IActionResult Order(OrderModel model)
         {
             ViewBag.message = Request.Cookies["userId"];
-            logger.LogInformation($"New Order -> orderType={model.OrderType}, city={model.City}, street={model.Street}, building={model.Building}, appartment={model.Apartment}, comment={model.Comment}");
+            logger.LogInformation($"New Order -> orderType={model.OrderType}, city={model.City}, street={model.Street}," +
+                                  $" building={model.Building}, appartment={model.Apartment}, comment={model.Comment}" +
+                                  $" Table={model.Table}, DateTime={model.DateTime.ToString()}");
             return View();
         }
         public IActionResult Order(ReserveOrderModel model)

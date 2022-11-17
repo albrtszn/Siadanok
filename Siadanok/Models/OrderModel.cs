@@ -10,6 +10,7 @@
         public string? Comment { get; set; }
 
         public string? Table { get; set; }
-
+        public DateTime DateTime { get; set; }
+        public string Wallet { get; set; }
     }
 }

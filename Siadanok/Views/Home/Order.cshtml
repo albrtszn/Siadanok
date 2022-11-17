@@ -6,40 +6,78 @@
     function check() {
         $("#choise1").hide();
         $("#choise2").hide();
-    if (document.getElementById('btnradio1').checked == true) {
+    if (document.getElementById('btnradio1').checked) {
         //Male radio button is checked
             $("#choise2").hide();
             $("#choise1").show();
-    } else if (document.getElementById('btnradio3').checked == true) {
+    } else if (document.getElementById('btnradio3').checked) {
         //Female radio button is checked
             //$("#choise").html('<p>200</p>');
             $("#choise1").hide();
             $("#choise2").show();
     }
     }
-    window.onload = check;
+    
+    function pay() {
+        $("#wallet").hide();
+        $("#card").hide();
+        $("#wallet2").hide();
+        $("#card2").hide();
+        if (document.getElementById('credit2').checked ) {
+            //Male radio button is checked
+            $("#wallet2").hide();
+            $("#card2").show();
+        } else if (document.getElementById('crypt2').checked ) {
+            //Female radio button is checked
+            //$("#choise").html('<p>200</p>');
+            $("#card2").hide();
+            $("#wallet2").show();
+        }
+    }
+
+    function pay1() {
+        $("#wallet").hide();
+        $("#card").hide();
+        $("#wallet2").hide();
+        $("#card2").hide();
+        if (document.getElementById('credit').checked ) {
+            //Male radio button is checked
+            $("#wallet").hide();
+            $("#card").show();
+        } else if (document.getElementById('crypt').checked) {
+            //Female radio button is checked
+            //$("#choise").html('<p>200</p>');
+            $("#card").hide();
+            $("#wallet").show();
+        }
+    }
+    window.onload = pay1
+
+    window.onload = check 
 </script>
 
 </br>
-<form action="/Home/Order" method="post" >
     
-    <div class="card border-primary mb-3" style="max-width: 200rem;">
-        <div class="card-header">оформление заказа</div>
+    
         <div class="card-body">
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input onclick="check()" type="radio" class="btn-check" name="OrderType" id="btnradio1" autocomplete="off" value="Delivery" checked="">
+        <input onclick="check()" type="radio" class="btn-check" name="OrderType" id="btnradio1" autocomplete="off" value="Delivery" >
                 <label class="btn btn-outline-primary" for="btnradio1">  Доставка  </label>
 
                 <input onclick="check()" type="radio" class="btn-check" name="OrderType" id="btnradio3" autocomplete="off" value="Reserve" checked="">
                 <label class="btn btn-outline-primary" for="btnradio3">  Зарезервировать  </label>
-
             </div>
-
         </div>
 
+
         <div id="choise1">
+        <hr class="my-4">
+
+        <form action="/Home/Order" method="post" >
+
             <div class="row g-3">
 
+                <input type="hidden" name="OrderType" value="Delivery"></input>
                 <div class="col-12">
                     <label for="address" class="form-label">Город</label>
                     <input name="City" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
@@ -77,40 +115,173 @@
                     <input name="Comment" type="text" class="form-control" id="address2" placeholder="Apartment or suite" value="">
                 </div>
 
+                <hr class="my-4">
 
+            <h4 class="mb-3">Оплата</h4>
+
+            <div class="my-3">
+                <div class="form-check">
+                    <input id="credit" onclick="pay1()" name="paymentMethod" type="radio" class="form-check-input" required="">
+                    <label class="form-check-label" for="credit">Карта</label>
+                </div>
+                <div class="form-check">
+                    <input id="crypt" onclick="pay1()" name="paymentMethod" type="radio" class="form-check-input" required="">
+                    <label class="form-check-label" for="debit">Криптокошелек</label>
+                </div>
             </div>
+
+            <div id="card" style="display:none;">
+                <div class="row gy-3">
+                    <div class="col-md-6">
+                        <label for="cc-name" class="form-label">Имя на карте</label>
+                        <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                        <small class="text-muted">Полное имя, как показано на карточке</small>
+                        <div class="invalid-feedback">
+                            Имя на карте обязательно
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cc-number" class="form-label">Номер кредитной карты</label>
+                        <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                        <div class="invalid-feedback">
+                            Требуется номер кредитной карты
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="cc-expiration" class="form-label">Срок действия</label>
+                        <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                        <div class="invalid-feedback">
+                            Требуется срок действия
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="cc-cvv" class="form-label">CVV</label>
+                        <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                        <div class="invalid-feedback">
+                            Требуется защитный код
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wallet" style="display:none;">
+                <div class="col-12">
+                    <label for="address" class="form-label">Номер кошелька</label>
+                    <input name="Wallet" type="text" class="form-control" id="address" placeholder="rg32dfg15d132dfg1xxxxx" required="" value=" ">
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите номер.
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        </br>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Оформить</button>
+        </form>
         </div>
 
+
+
+
         <div id="choise2">
+        <form action="/Home/Order" method="post" >
+        <hr class="my-4">
+            <input type="hidden" name="OrderType" value="Reserve"></input>
             <div class="row g-3">
                 <div class="card-body">
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio4" autocomplete="off" value="1" checked="">
                 <label class="btn btn-outline-primary" for="btnradio4">  Стол 1  </label>
 
-                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio5" autocomplete="off" value="2" checked="">
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio5" autocomplete="off" value="2" >
                 <label class="btn btn-outline-primary" for="btnradio5">  Стол 2  </label>
 
-                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio6" autocomplete="off" value="2" checked="">
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio6" autocomplete="off" value="3" >
                 <label class="btn btn-outline-primary" for="btnradio6">  Стол 3  </label>
 
-                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio7" autocomplete="off" value="2" checked="">
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio7" autocomplete="off" value="4">
                 <label class="btn btn-outline-primary" for="btnradio7">  Стол 4  </label>
 
-                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio8" autocomplete="off" value="2" checked="">
+                <input onclick="" type="radio" class="btn-check" name="Table" id="btnradio8" autocomplete="off" value="5" >
                 <label class="btn btn-outline-primary" for="btnradio8">  Стол 5  </label>
+                    </div>
+
+                 </br>
+                 </br>
+                 </br>
+                <div class="form-check">
+                <label for="party" >Выберите дату</label>
+                <input id="party" type="datetime-local" name="DateTime" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" required>
+                <span class="validity">Выберите дату</span>
+                </div>
+
+                <hr class="my-4">
+
+                <h4 class="mb-3">Оплата</h4>
+
+                <div class="my-3">
+                    <div class="form-check">
+                        <input id="credit2" onclick="pay()" name="paymentMethod" type="radio" class="form-check-input" required="">
+                        <label class="form-check-label" for="credit">Карта</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="crypt2" onclick="pay()" name="paymentMethod" type="radio" class="form-check-input" required="">
+                        <label class="form-check-label" for="debit">Криптокошелек</label>
+                    </div>
+                </div>
+                
+                <div id="card2" style="display:none;">
+                <div class="row gy-3">
+                    <div class="col-md-6">
+                        <label for="cc-name" class="form-label">Имя на карте</label>
+                        <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                        <small class="text-muted">Полное имя, как показано на карточке</small>
+                        <div class="invalid-feedback">
+                            Имя на карте обязательно
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cc-number" class="form-label">Номер кредитной карты</label>
+                        <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                        <div class="invalid-feedback">
+                            Требуется номер кредитной карты
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="cc-expiration" class="form-label">Срок действия</label>
+                        <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                        <div class="invalid-feedback">
+                            Требуется срок действия
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="cc-cvv" class="form-label">CVV</label>
+                        <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                        <div class="invalid-feedback">
+                            Требуется защитный код
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div id="wallet2" style="display:none;">
+                    <div class="col-12">
+                        <label for="address" class="form-label">Номер кошелька</label>
+                        <input name="Wallet" type="text" class="form-control" id="address" placeholder="rg32dfg15d132dfg1xxxxx" required="" value=" ">
+                        <div class="invalid-feedback">
+                            Пожалуйста, введите номер.
+                        </div>
                     </div>
                 </div>
 
 
-         
-
             </div>
-
-            </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Оформить</button>
-
-        </div>
-        
-
-</form>
+        </br>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Оформить</button>
+        </form>
