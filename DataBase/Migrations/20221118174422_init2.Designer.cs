@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(EFDBContext))]
-    [Migration("20221114153640_init")]
-    partial class init
+    [Migration("20221118174422_init2")]
+    partial class init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,7 +50,7 @@ namespace DataBase.Migrations
 
             modelBuilder.Entity("DataBase.Entity.DeliveryOrder", b =>
                 {
-                    b.Property<string>("OrderId")
+                    b.Property<string>("DeliveryId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Apartment")
@@ -60,7 +60,7 @@ namespace DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Cart")
+                    b.Property<string>("CartId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -68,7 +68,18 @@ namespace DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Date")
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateOfOrder")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PayMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -76,11 +87,11 @@ namespace DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("User")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("DeliveryId");
 
                     b.ToTable("deliveryOrderRepo");
                 });
@@ -145,6 +156,40 @@ namespace DataBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("userRepo");
+                });
+
+            modelBuilder.Entity("Siadanok.Models.ReserveOrder", b =>
+                {
+                    b.Property<string>("ReserveId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CartId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateOfOrder")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PayMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReserveDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Table")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReserveId");
+
+                    b.ToTable("reserveOrderRepo");
                 });
 #pragma warning restore 612, 618
         }

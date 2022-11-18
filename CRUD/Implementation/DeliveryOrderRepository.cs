@@ -29,7 +29,7 @@ namespace CRUD.Implementation
 
         public DeliveryOrder GetById(string id)
         {
-            return context.deliveryOrderRepo.FirstOrDefault(x => x.OrderId.Equals(id));
+            return context.deliveryOrderRepo.FirstOrDefault(x => x.DeliveryId.Equals(id));
         }
 
         public void SaveItem(DeliveryOrder itemDeliveryOrderToSave)

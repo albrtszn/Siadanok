@@ -43,11 +43,13 @@
         if (document.getElementById('credit').checked ) {
             //Male radio button is checked
             $("#wallet").hide();
+            //document.getElementById('card').hidden = false;
             $("#card").show();
         } else if (document.getElementById('crypt').checked) {
             //Female radio button is checked
             //$("#choise").html('<p>200</p>');
             $("#card").hide();
+            document.getElementById('card').hidden = true;
             $("#wallet").show();
         }
     }
@@ -80,7 +82,7 @@
                 <input type="hidden" name="OrderType" value="Delivery"></input>
                 <div class="col-12">
                     <label for="address" class="form-label">Город</label>
-                    <input name="City" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
+                    <input name="City" type="text" class="form-control" id="address" placeholder="Москва, Арбат" value="">
                     <div class="invalid-feedback">
                         Пожалуйста, введите город.
                     </div>
@@ -88,7 +90,7 @@
 
                 <div class="col-12">
                     <label for="address" class="form-label">Улица</label>
-                    <input name="Street" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
+                    <input name="Street" type="text" class="form-control" id="address" placeholder="Москва, Арбат" value="">
                     <div class="invalid-feedback">
                         Пожалуйста, введите улицу.
                     </div>
@@ -96,7 +98,7 @@
 
                 <div class="col-12">
                     <label for="address" class="form-label">Номер дома/строения</label>
-                    <input name="Building" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
+                    <input name="Building" type="text" class="form-control" id="address" placeholder="Москва, Арбат" value="">
                     <div class="invalid-feedback">
                         Пожалуйста, введите номер дома.
                     </div>
@@ -104,7 +106,7 @@
 
                 <div class="col-12">
                     <label for="address" class="form-label">Квартира</label>
-                    <input name="Apartment" type="text" class="form-control" id="address" placeholder="Москва, Арбат" required="" value="">
+                    <input name="Apartment" type="text" class="form-control" id="address" placeholder="Москва, Арбат" value="">
                     <div class="invalid-feedback">
                         Пожалуйста, введите номер квартиры.
                     </div>
@@ -121,11 +123,11 @@
 
             <div class="my-3">
                 <div class="form-check">
-                    <input id="credit" onclick="pay1()" name="paymentMethod" type="radio" class="form-check-input" required="">
+                    <input id="credit" onclick="pay1()" name="PayMethod" value="Debit Card" type="radio" class="form-check-input" >
                     <label class="form-check-label" for="credit">Карта</label>
                 </div>
                 <div class="form-check">
-                    <input id="crypt" onclick="pay1()" name="paymentMethod" type="radio" class="form-check-input" required="">
+                    <input id="crypt" onclick="pay1()" name="PayMethod" value="Crypto Wallet" type="radio" class="form-check-input" >
                     <label class="form-check-label" for="debit">Криптокошелек</label>
                 </div>
             </div>
@@ -134,7 +136,7 @@
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <label for="cc-name" class="form-label">Имя на карте</label>
-                        <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                        <input name="NameCardHolder" type="text" class="form-control" id="cc-name" placeholder="">
                         <small class="text-muted">Полное имя, как показано на карточке</small>
                         <div class="invalid-feedback">
                             Имя на карте обязательно
@@ -143,7 +145,7 @@
 
                     <div class="col-md-6">
                         <label for="cc-number" class="form-label">Номер кредитной карты</label>
-                        <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                        <input name="CardNumber" type="text" class="form-control" id="cc-number" placeholder="">
                         <div class="invalid-feedback">
                             Требуется номер кредитной карты
                         </div>
@@ -151,7 +153,7 @@
 
                     <div class="col-md-3">
                         <label for="cc-expiration" class="form-label">Срок действия</label>
-                        <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                        <input name="CardExpiration" type="text" class="form-control" id="cc-expiration" placeholder="">
                         <div class="invalid-feedback">
                             Требуется срок действия
                         </div>
@@ -159,7 +161,7 @@
 
                     <div class="col-md-3">
                         <label for="cc-cvv" class="form-label">CVV</label>
-                        <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                        <input name="CardCVV" type="text" class="form-control" id="cc-cvv" placeholder="">
                         <div class="invalid-feedback">
                             Требуется защитный код
                         </div>
@@ -170,7 +172,7 @@
             <div id="wallet" style="display:none;">
                 <div class="col-12">
                     <label for="address" class="form-label">Номер кошелька</label>
-                    <input name="Wallet" type="text" class="form-control" id="address" placeholder="rg32dfg15d132dfg1xxxxx" required="" value=" ">
+                    <input name="Wallet" type="text" class="form-control" id="address" placeholder="rg32dfg15d132dfg1xxxxx" value=" ">
                     <div class="invalid-feedback">
                         Пожалуйста, введите номер.
                     </div>
@@ -214,7 +216,7 @@
                  </br>
                 <div class="form-check">
                 <label for="party" >Выберите дату</label>
-                <input id="party" type="datetime-local" name="DateTime" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" required>
+                <input id="party" type="datetime-local" name="DateTime" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" >
                 <span class="validity">Выберите дату</span>
                 </div>
 
@@ -224,11 +226,11 @@
 
                 <div class="my-3">
                     <div class="form-check">
-                        <input id="credit2" onclick="pay()" name="paymentMethod" type="radio" class="form-check-input" required="">
+                        <input id="credit2" onclick="pay()" name="PayMethod" value="Debit Card" type="radio" class="form-check-input" >
                         <label class="form-check-label" for="credit">Карта</label>
                     </div>
                     <div class="form-check">
-                        <input id="crypt2" onclick="pay()" name="paymentMethod" type="radio" class="form-check-input" required="">
+                        <input id="crypt2" onclick="pay()" name="PayMethod" value="Crypto Wallet" type="radio" class="form-check-input" >
                         <label class="form-check-label" for="debit">Криптокошелек</label>
                     </div>
                 </div>
@@ -237,8 +239,7 @@
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <label for="cc-name" class="form-label">Имя на карте</label>
-                        <input type="text" class="form-control" id="cc-name" placeholder="" required="">
-                        <small class="text-muted">Полное имя, как показано на карточке</small>
+                        <input name="NameCardHolder" type="text" class="form-control" id="cc-name" placeholder="" 
                         <div class="invalid-feedback">
                             Имя на карте обязательно
                         </div>
@@ -246,7 +247,7 @@
 
                     <div class="col-md-6">
                         <label for="cc-number" class="form-label">Номер кредитной карты</label>
-                        <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                        <input name="CardNumber" type="text" class="form-control" id="cc-number" placeholder="" >
                         <div class="invalid-feedback">
                             Требуется номер кредитной карты
                         </div>
@@ -254,7 +255,7 @@
 
                     <div class="col-md-3">
                         <label for="cc-expiration" class="form-label">Срок действия</label>
-                        <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                        <input name="CardExpiration" type="text" class="form-control" id="cc-expiration" placeholder="">
                         <div class="invalid-feedback">
                             Требуется срок действия
                         </div>
@@ -262,7 +263,7 @@
 
                     <div class="col-md-3">
                         <label for="cc-cvv" class="form-label">CVV</label>
-                        <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                        <input name="NameCardHolder" type="text" class="form-control" id="cc-cvv" placeholder="">
                         <div class="invalid-feedback">
                             Требуется защитный код
                         </div>
@@ -273,7 +274,7 @@
                 <div id="wallet2" style="display:none;">
                     <div class="col-12">
                         <label for="address" class="form-label">Номер кошелька</label>
-                        <input name="Wallet" type="text" class="form-control" id="address" placeholder="rg32dfg15d132dfg1xxxxx" required="" value=" ">
+                        <input name="Wallet" type="text" class="form-control" id="address" placeholder="rg32dfg15d132dfg1xxxxx" value=" ">
                         <div class="invalid-feedback">
                             Пожалуйста, введите номер.
                         </div>

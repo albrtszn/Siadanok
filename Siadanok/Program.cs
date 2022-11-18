@@ -17,6 +17,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<ICartItemRepository, CartItemRepository>();
 builder.Services.AddTransient<IDeliveryOrderRepository, DeliveryOrderRepository>();
+builder.Services.AddTransient<IReserveOrderRepository, ReserveOrderRepository>();
 builder.Services.AddScoped<DataManager>();
 builder.Services.AddScoped<Service>();
 

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataBase.Enum;
 
 namespace DataBase.Entity
 {
@@ -12,13 +13,16 @@ namespace DataBase.Entity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string OrderId { get; set; }
-        public string Date { get; set; }
-        public string User { get; set; }
-        public string Cart { get; set; }
+        public string DeliveryId { get; set; }
+        public string DateOfOrder { get; set; }
+        public string PayMethod { get; set; }
+        public string UserId { get; set; }
+        public string CartId { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string Building { get; set; }
         public string? Apartment { get; set; }
+        public string? Comment { get; set; }
+        public string Status { get; set; }
     }
 }

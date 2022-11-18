@@ -126,5 +126,43 @@ namespace Siadanok.Services
             Console.WriteLine($"userId={0}, itemId={1}",userId, itemId);
             dataManager.Cart.SaveItem(new CartItem() { UserId= userId, ItemId=item.Id });
         }
+        /*
+         *  DeliveryOrder Logic
+         */
+        public IEnumerable<DeliveryOrder> GetAllDeliveryOrders()
+        {
+            return dataManager.Delivery.GetAllItems();
+        }
+        public void DeleteItem(DeliveryOrder deliveryOrderToDelete)
+        {
+            dataManager.Delivery.DeleteItem(deliveryOrderToDelete);
+        }
+        public DeliveryOrder GetDeliveryOrderById(string id)
+        {
+            return dataManager.Delivery.GetById(id);
+        }
+        public void SaveItem(DeliveryOrder deliveryOrderToSave)
+        {
+            dataManager.Delivery.SaveItem(deliveryOrderToSave);
+        }
+        /*
+         *  ReserveOrder Logic
+         */
+        public IEnumerable<ReserveOrder> GetAllReserveOrders()
+        {
+            return dataManager.Reserve.GetAllItems();
+        }
+        public void DeleteItem(ReserveOrder reserveOrderToDelete)
+        {
+            dataManager.Reserve.DeleteItem(reserveOrderToDelete);
+        }
+        public ReserveOrder GetReserveOrderById(string id)
+        {
+            return dataManager.Reserve.GetById(id);
+        }
+        public void SaveItem(ReserveOrder reserveOrderToSave)
+        {
+            dataManager.Reserve.SaveItem(reserveOrderToSave);
+        }
     }
 }

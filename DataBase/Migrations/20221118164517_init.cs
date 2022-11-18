@@ -28,18 +28,22 @@ namespace DataBase.Migrations
                 name: "deliveryOrderRepo",
                 columns: table => new
                 {
-                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    User = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cart = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeliveryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DateOfOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PayMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReserveDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CartId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Apartment = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Apartment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_deliveryOrderRepo", x => x.OrderId);
+                    table.PrimaryKey("PK_deliveryOrderRepo", x => x.DeliveryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,6 +62,22 @@ namespace DataBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_itemRepo", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "reserveOrderRepo",
+                columns: table => new
+                {
+                    ReserveId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DateOfOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PayMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CartId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Table = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_reserveOrderRepo", x => x.ReserveId);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,6 +106,9 @@ namespace DataBase.Migrations
 
             migrationBuilder.DropTable(
                 name: "itemRepo");
+
+            migrationBuilder.DropTable(
+                name: "reserveOrderRepo");
 
             migrationBuilder.DropTable(
                 name: "userRepo");

@@ -1,4 +1,5 @@
 ﻿using DataBase.Entity;
+using DataBase.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -25,23 +26,10 @@ namespace Siadanok.Controllers
 
         public IActionResult Index()
         {
-            //Response.Cookies.Append("SessionId", Guid.NewGuid().ToString());
             if (Request.Cookies["userId"] != null)
             {
                 ViewBag.message = Request.Cookies["userId"];
             }
-            else
-            {
-                //ViewBag.message = "Cookies are empty";
-            }
-
-            /*if (string.IsNullOrEmpty(HttpContext.Session.GetString("SessionId")))
-            {
-                HttpContext.Session.SetString("SessionId", Guid.NewGuid().ToString()); ;
-            }
-            var name = HttpContext.Session.GetString("SessionId");
-
-            logger.LogInformation("Session Name: {Name}", name);*/
             return View();
         }
         [HttpGet]
@@ -69,7 +57,6 @@ namespace Siadanok.Controllers
         [HttpPost]
         public IActionResult Login(LoginModel loginModel)
         {
-            //User? user = service.GetAllUsers().FirstOrDefault(x => x.Number.Equals(loginModel.Login));
             IEnumerable<User> list = service.GetAllUsers();
             User user = new User();
             foreach (User buffer in list)
@@ -144,12 +131,57 @@ namespace Siadanok.Controllers
         public IActionResult Order(OrderModel model)
         {
             ViewBag.message = Request.Cookies["userId"];
-            logger.LogInformation($"New Order -> orderType={model.OrderType}, city={model.City}, street={model.Street}," +
+            logger.LogInformation($"New Order -> orderType={model.OrderType}, payMeythd={model.PayMethod}, city={model.City}, street={model.Street}," +
                                   $" building={model.Building}, appartment={model.Apartment}, comment={model.Comment}" +
-                                  $" Table={model.Table}, DateTime={model.DateTime.ToString()}");
+                                  $" Table={model.Table}, DateTime={model.DateTime}");
+            List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
+            if (model.OrderType.Equals("Delivery"))
+            {
+                string cartId = Guid.NewGuid().ToString();
+                DeliveryOrder delivery = new DeliveryOrder() {
+                    DeliveryId = Guid.NewGuid().ToString(),
+                    DateOfOrder = DateTime.Now.ToString(),
+                    PayMethod = model.PayMethod,
+                    UserId = Request.Cookies["userId"],
+                    CartId = cartId,
+                    City = model.City,
+                    Street = model.Street,
+                    Building = model.Building,
+                    Apartment = model.Apartment,
+                    Comment = model.Comment,
+                    Status = StatusOfDelivery.Created.ToString()
+            };
+                service.SaveItem(delivery);
+                foreach (CartItem cartItem in listCart)
+                {
+                    cartItem.CartId = cartId;
+                    service.SaveItem(cartItem);
+                }
+            }
+            if (model.OrderType.Equals("Reserve"))
+            {
+                string cartId = Guid.NewGuid().ToString();
+                ReserveOrder reserve = new ReserveOrder()
+                {
+                    ReserveId = Guid.NewGuid().ToString(),
+                    DateOfOrder = DateTime.Now.ToString(),
+                    PayMethod = model.PayMethod,
+                    UserId = Request.Cookies["userId"],
+                    ReserveDate = model.DateTime.ToString(),
+                    CartId = cartId,
+                    Table = model.Table
+                };
+                service.SaveItem(reserve);
+                foreach (CartItem cartItem in listCart)
+                {
+                    cartItem.CartId = cartId;
+                    service.SaveItem(cartItem);
+                }
+                Response.Cookies.Delete("cart");
+            }
             return View();
         }
-        public IActionResult Order(ReserveOrderModel model)
+        public IActionResult Order(Models.ReserveOrder model)
         {
             ViewBag.message = Request.Cookies["userId"];
             //logger.LogInformation($"New Order -> orderType={model.OrderType}, city={model.City}, street={model.Street}, building={model.Building}, appartment={model.Apartment}, comment={model.Comment}");

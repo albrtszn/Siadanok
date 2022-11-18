@@ -35,7 +35,7 @@ namespace DataBase
             //context.cartItemsRepo.EnsureDeleted(,);
             //context.Database.EnsureCreated();
             if(!context.userRepo.Any()){
-                context.userRepo.Add(new User() { Id=Guid.NewGuid().ToString(),Number= "+37543638-66-66", Password=Base64Encode("Password1234"), FirstName ="Dexter", SecondName="Horn"});
+                context.userRepo.Add(new User() { Id=Guid.NewGuid().ToString(),Number= "+375436386666", Password=Base64Encode("Password1234"), FirstName ="Dexter", SecondName="Horn"});
                 context.SaveChanges();
             }
             if (!context.itemRepo.Any()){
@@ -49,7 +49,7 @@ namespace DataBase
                 context.itemRepo.Add(new Item() { Name = "Глаз тунца", Picture = ImageToByteArray(@"D:\\Visual_Stidio_projects\\Siadanok\\Pictures\\EyeTunec.jpg"), Type = ItemType.Meal.ToString(), IsExotic = true.ToString(), Price = 33.30m, Descryption = "Между японцами и тунцом сущетсвует какая-то особая связь - японцы поедают основную часть мирового вылова этой рыбы за год. В супермаркетах частенько можно увидеть целый отдел, посвященный тунцам, в котором можно приобрести любые части рыбы. Самое экзотическое предложение - глаза тунца. Их поджаривают и подают с рисом и соевым соусом. " });
                 // Poor
                 context.itemRepo.Add(new Item() { Name = "Лепешка из грязи", Picture = ImageToByteArray(@"D:\\Visual_Stidio_projects\\Siadanok\\Pictures\\Gryaz.jpg"), Type = ItemType.Meal.ToString(), IsExotic = false.ToString(), Price = 0.05m, Descryption = "Это блюдо также появилось не от хорошей жизни: Гаити одно из самых бедных государств западного полушария. Малоимущие гаитянцы вынуждены кормиться лепешками из прибрежной грязи. В состав лепешек могут входить кусочки овощей, растительный жир или маргарин. Грязевые печеньки сушат прямо на солнце, после чего развозят по местным магазинам. " });
-                context.itemRepo.Add(new Item() { Name = "Стакан воды", Picture = ImageToByteArray(@"D:\\Visual_Stidio_projects\\Siadanok\\Pictures\\Water.jpg"), Type = ItemType.Meal.ToString(), IsExotic = false.ToString(), Price = 0.08m, Descryption = "Чтобы смочить горло перед экзотическим блюдом." });
+                context.itemRepo.Add(new Item() { Name = "Стакан воды", Picture = ImageToByteArray(@"D:\\Visual_Stidio_projects\\Siadanok\\Pictures\\Water.jpg"), Type = ItemType.Drink.ToString(), IsExotic = false.ToString(), Price = 0.08m, Descryption = "Чтобы смочить горло перед экзотическим блюдом." });
 
                 context.SaveChanges();
             }
