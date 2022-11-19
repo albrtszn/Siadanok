@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataBase.Migrations
 {
-    public partial class init : Migration
+    public partial class role : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,7 +31,6 @@ namespace DataBase.Migrations
                     DeliveryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateOfOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PayMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReserveDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CartId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -39,7 +38,7 @@ namespace DataBase.Migrations
                     Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Apartment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,6 +69,7 @@ namespace DataBase.Migrations
                 {
                     ReserveId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateOfOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReserveDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PayMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CartId = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -78,6 +78,17 @@ namespace DataBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_reserveOrderRepo", x => x.ReserveId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "roleRepo",
+                columns: table => new
+                {
+                    RoleName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_roleRepo", x => x.RoleName);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,6 +104,20 @@ namespace DataBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_userRepo", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "userRoleRepo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_userRoleRepo", x => x.Id);
                 });
         }
 
@@ -111,7 +136,13 @@ namespace DataBase.Migrations
                 name: "reserveOrderRepo");
 
             migrationBuilder.DropTable(
+                name: "roleRepo");
+
+            migrationBuilder.DropTable(
                 name: "userRepo");
+
+            migrationBuilder.DropTable(
+                name: "userRoleRepo");
         }
     }
 }

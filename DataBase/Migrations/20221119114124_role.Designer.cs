@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(EFDBContext))]
-    [Migration("20221118174422_init2")]
-    partial class init2
+    [Migration("20221119114124_role")]
+    partial class role
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -132,6 +132,16 @@ namespace DataBase.Migrations
                     b.ToTable("itemRepo");
                 });
 
+            modelBuilder.Entity("DataBase.Entity.Role", b =>
+                {
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("RoleName");
+
+                    b.ToTable("roleRepo");
+                });
+
             modelBuilder.Entity("DataBase.Entity.User", b =>
                 {
                     b.Property<string>("Id")
@@ -156,6 +166,27 @@ namespace DataBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("userRepo");
+                });
+
+            modelBuilder.Entity("DataBase.Entity.UserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("userRoleRepo");
                 });
 
             modelBuilder.Entity("Siadanok.Models.ReserveOrder", b =>

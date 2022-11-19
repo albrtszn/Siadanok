@@ -5,6 +5,9 @@ using CRUD.Interfaces;
 using CRUD;
 using CRUD.Implementation;
 using Siadanok.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Siadanok.Models;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +24,13 @@ builder.Services.AddTransient<IReserveOrderRepository, ReserveOrderRepository>()
 builder.Services.AddScoped<DataManager>();
 builder.Services.AddScoped<Service>();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => {
+        options.LoginPath = "/Home/Login";
+        options.AccessDeniedPath = "/Home/accessdenied";
+    });
+builder.Services.AddAuthorization();
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -34,6 +44,7 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+//init database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -42,6 +53,14 @@ using (var scope = app.Services.CreateScope())
     InitdData.Init(context);
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+/*app.MapPost("/Home/Login", async (LoginModel model) =>
+{
+
+});*/
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -49,8 +68,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

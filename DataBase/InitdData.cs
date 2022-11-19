@@ -35,8 +35,9 @@ namespace DataBase
             //context.cartItemsRepo.EnsureDeleted(,);
             //context.Database.EnsureCreated();
             if(!context.userRepo.Any()){
-                context.userRepo.Add(new User() { Id=Guid.NewGuid().ToString(),Number= "+375436386666", Password=Base64Encode("Password1234"), FirstName ="Dexter", SecondName="Horn"});
-                context.SaveChanges();
+                string guid = Guid.NewGuid().ToString();
+                context.userRepo.Add(new User() { Id= guid, Number= "+375436386666", Password=Base64Encode("Password1234"), FirstName ="Dexter", SecondName="Horn"});
+                context.userRoleRepo.Add(new UserRole() { UserId = guid, RoleName = RoleEnum.user.ToString() });
             }
             if (!context.itemRepo.Any()){
                 // Exotic
@@ -50,9 +51,14 @@ namespace DataBase
                 // Poor
                 context.itemRepo.Add(new Item() { Name = "Лепешка из грязи", Picture = ImageToByteArray(@"D:\\Visual_Stidio_projects\\Siadanok\\Pictures\\Gryaz.jpg"), Type = ItemType.Meal.ToString(), IsExotic = false.ToString(), Price = 0.05m, Descryption = "Это блюдо также появилось не от хорошей жизни: Гаити одно из самых бедных государств западного полушария. Малоимущие гаитянцы вынуждены кормиться лепешками из прибрежной грязи. В состав лепешек могут входить кусочки овощей, растительный жир или маргарин. Грязевые печеньки сушат прямо на солнце, после чего развозят по местным магазинам. " });
                 context.itemRepo.Add(new Item() { Name = "Стакан воды", Picture = ImageToByteArray(@"D:\\Visual_Stidio_projects\\Siadanok\\Pictures\\Water.jpg"), Type = ItemType.Drink.ToString(), IsExotic = false.ToString(), Price = 0.08m, Descryption = "Чтобы смочить горло перед экзотическим блюдом." });
-
-                context.SaveChanges();
             }
+            if (!context.roleRepo.Any())
+            {
+                context.roleRepo.Add(new Role() { RoleName = RoleEnum.user.ToString() });
+                context.roleRepo.Add(new Role() { RoleName = RoleEnum.manager.ToString() });
+                context.roleRepo.Add(new Role() { RoleName = RoleEnum.admin.ToString() });
+            }
+            context.SaveChanges();
         }
     }
 }
