@@ -13,6 +13,8 @@ namespace DataBase
     public class EFDBContext : DbContext
     {
         public DbSet<User> userRepo { get; set; }
+        public DbSet<Manager> managerRepo { get; set; }
+        public DbSet<Admin> adminRepo { get; set; }
         public DbSet<Item> itemRepo { get; set; }
         public DbSet<CartItem> cartItemsRepo { get; set; }
         public DbSet<DeliveryOrder> deliveryOrderRepo { get; set; }

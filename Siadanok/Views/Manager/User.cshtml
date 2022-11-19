@@ -1,0 +1,65 @@
+﻿@using DataBase.Entity
+@using System.Drawing
+@model List<User>
+@functions {
+    public Image ByteArrayToImage(byte[] byteArrayIn)
+    {
+        using (var ms = new MemoryStream(byteArrayIn))
+        {
+            var returnImage = Image.FromStream(ms);
+
+            return returnImage;
+        }
+    }
+}
+
+</br>
+<div>
+    <a href="/Manager/Item">
+        <button type="button" class="btn btn-secondary">Secondary</button>
+    </a>
+    <a href="/Manager/User">
+        <button type="button" class="btn btn-secondary">Secondary</button>
+    </a>
+    <button type="button" class="btn btn-secondary">Secondary</button>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Picture</th>
+            <th scope="col">Number</th>
+            <th scope="col">Password</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">SecondName</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <div>
+                @{
+                   //var base64 = Convert.ToBase64String(user.Picture);
+                   // var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                }
+            <tr>
+                <th scope="row">@user.Id</th>
+                <th>
+                    <img src="" width="25px" height="25px">
+                </th>
+                <th>@user.Number</th>
+                <th>@user.Password</th>
+                <th>@user.FirstName</th>
+                <th>@user.SecondName</th>
+                <th>
+                    <a href="/@user.Id">
+                        <button type="button" class="btn btn-primary btn-sm">Редактировать</button>
+                    </a>
+                </th>
+            </tr>
+            </div>
+        }
+    </tbody>
+</table>

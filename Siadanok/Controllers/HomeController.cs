@@ -20,7 +20,6 @@ namespace Siadanok.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
-        //private EFDBContext _context;
         private Service service;
         public HomeController(ILogger<HomeController> logger,
                               Service service)
@@ -63,34 +62,68 @@ namespace Siadanok.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel, string? returnUrl)
         {
-            IEnumerable<User> list = service.GetAllUsers();
-            User user = new User();
-            foreach (User buffer in list)
-            {
-                Console.WriteLine(buffer.Number);
-                if (buffer.Number.Equals(loginModel.Login))
-                {
-                    user = buffer;
-                }
-            }
-            Console.WriteLine($"{user.Id},{user.Password}");
-            if (Service.Base64Decode(user.Password) == loginModel.Password)
-            {
-                CookieOptions option = new CookieOptions();
-                option.Expires = DateTimeOffset.Now.AddHours(1);
-                Response.Cookies.Append("userId", user.Id.ToString(), option);
-                //Response.Cookies.Append("cart", null, option);
-                ViewBag.message = Request.Cookies["userId"];
+            User? user = service.GetAllUsers().ToList().Find(x => x.Number.Equals(loginModel.Login));
+            DataBase.Entity.Manager? manager = service.GetAllManagers().ToList().Find(x => x.Name.Equals(loginModel.Login));
+            Admin? admin = service.GetAllAdmins().ToList().Find(x => x.Name.Equals(loginModel.Login));
 
-                var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.user.ToString()) };
-                // создаем объект ClaimsIdentity
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-                // установка аутентификационных куки
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+            if (user != null) {
+                Console.WriteLine($"{user.Id},{user.Password}");
+                if (Service.Base64Decode(user.Password).Equals(loginModel.Password))
+                {
+                    CookieOptions option = new CookieOptions();
+                    option.Expires = DateTimeOffset.Now.AddHours(1);
+                    Response.Cookies.Append("userId", user.Id.ToString(), option);
+                    //Response.Cookies.Append("cart", null, option);
+                    ViewBag.message = Request.Cookies["userId"];
+
+                    var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.user.ToString()) };
+                    // создаем объект ClaimsIdentity
+                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                    // установка аутентификационных куки
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                }
+                return Redirect(returnUrl ?? "/");
             }
-            return Redirect(returnUrl ?? "/");
-            //return (IActionResult)Results.Redirect(ReturnUrl.Replace("/Home","") ?? "/");
-            //return View();
+            if (manager != null)
+            {
+                Console.WriteLine($"{manager.Id},{manager.Password}");
+                if (Service.Base64Decode(manager.Password).Equals(loginModel.Password))
+                {
+                    CookieOptions option = new CookieOptions();
+                    option.Expires = DateTimeOffset.Now.AddHours(1);
+                    Response.Cookies.Append("userId", manager.Id.ToString(), option);
+                    //Response.Cookies.Append("cart", null, option);
+                    ViewBag.message = Request.Cookies["userId"];
+
+                    var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.manager.ToString()) };
+                    // создаем объект ClaimsIdentity
+                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                    // установка аутентификационных куки
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                }
+                return Redirect(returnUrl ?? "/");
+            }
+            if (admin != null)
+            {
+                Console.WriteLine($"{admin.Id},{admin.Password}");
+                if (Service.Base64Decode(admin.Password).Equals(loginModel.Password))
+                {
+                    CookieOptions option = new CookieOptions();
+                    option.Expires = DateTimeOffset.Now.AddHours(1);
+                    Response.Cookies.Append("userId", admin.Id.ToString(), option);
+                    //Response.Cookies.Append("cart", null, option);
+                    ViewBag.message = Request.Cookies["userId"];
+
+                    var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.admin.ToString()) };
+                    // создаем объект ClaimsIdentity
+                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                    // установка аутентификационных куки
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                }
+                return Redirect(returnUrl ?? "/");
+            }
+            return Content("incorrect data");
+
         }
         [HttpGet]
         public async Task<IActionResult> LogOut()
@@ -111,7 +144,18 @@ namespace Siadanok.Controllers
             ViewBag.message = Request.Cookies["userId"];
             return View(service.GetAllItems());
         }
+        [Authorize(Roles = "manager")]
+        public string manager()
+        {
+            return "manager";
+        }
+        [Authorize(Roles = "admin")]
+        public string admin()
+        {
+            return "admin";
+        }
         //[HttpPost]
+        [Authorize(Roles = "user")]
         public IActionResult addCartItem(int itemId)
         {
             if (Request.Cookies["cart"] == null)
@@ -123,11 +167,12 @@ namespace Siadanok.Controllers
             else
             {
                 List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
-                listCart.Add(new CartItem() { ItemId=itemId, UserId= Request.Cookies["userId"] });
+                listCart.Add(new CartItem() { ItemId = itemId, UserId = Request.Cookies["userId"] });
                 Response.Cookies.Append("cart", JsonConvert.SerializeObject(listCart));
             }
             return Redirect("Menu");
         }
+        [Authorize(Roles = "user")]
         public IActionResult deleteCartItem(int itemId)
         {
             List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
@@ -145,12 +190,14 @@ namespace Siadanok.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "user")]
         public IActionResult Order()
         {
             ViewBag.message = Request.Cookies["userId"];
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "user")]
         public IActionResult Order(OrderModel model)
         {
             ViewBag.message = Request.Cookies["userId"];
@@ -173,7 +220,7 @@ namespace Siadanok.Controllers
                     Apartment = model.Apartment,
                     Comment = model.Comment,
                     Status = StatusOfDelivery.Created.ToString()
-            };
+                };
                 service.SaveItem(delivery);
                 foreach (CartItem cartItem in listCart)
                 {
@@ -204,20 +251,8 @@ namespace Siadanok.Controllers
             }
             return View();
         }
-        public IActionResult Order(ReserveOrder model)
-        {
-            ViewBag.message = Request.Cookies["userId"];
-            //logger.LogInformation($"New Order -> orderType={model.OrderType}, city={model.City}, street={model.Street}, building={model.Building}, appartment={model.Apartment}, comment={model.Comment}");
-            logger.LogInformation($"{model.Table}");
-            return View();
-        }
-        /*[HttpPost]
-        public IActionResult Order(ReserveOrderModel model)
-        {
-            ViewBag.message = Request.Cookies["userId"];
-            return View();
-        }*/
 
+        [Authorize(Roles = "user")]
         public IActionResult buyItems()
         {
             List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
@@ -231,12 +266,14 @@ namespace Siadanok.Controllers
             return Redirect("/");
         }
         [HttpGet]
+        [Authorize(Roles = "user")]
         public IActionResult Account()
         {
             ViewBag.message = Request.Cookies["userId"];
             return View(service.GetUserModel(Request.Cookies["userId"]));
         }
         [HttpGet]
+        [Authorize(Roles = "user")]
         public IActionResult Cart()
         {
             ViewBag.message = Request.Cookies["userId"];

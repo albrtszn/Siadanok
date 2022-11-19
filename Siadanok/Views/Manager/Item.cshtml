@@ -1,0 +1,67 @@
+﻿@using DataBase.Entity
+@using System.Drawing
+@model List<Item>
+@functions {
+    public Image ByteArrayToImage(byte[] byteArrayIn)
+    {
+        using (var ms = new MemoryStream(byteArrayIn))
+        {
+            var returnImage = Image.FromStream(ms);
+
+            return returnImage;
+        }
+    }
+}
+
+</br>
+<div>
+    <a href="/Manager/Item">
+        <button type="button" class="btn btn-secondary">Secondary</button>
+    </a>
+    <a href="/Manager/User">
+        <button type="button" class="btn btn-secondary">Secondary</button>
+    </a>
+    <button type="button" class="btn btn-secondary">Secondary</button>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Picture</th>
+            <th scope="col">Type</th>
+            <th scope="col">IsExotic</th>
+            <th scope="col">Descryption</th>
+            <th scope="col">Price</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <div>
+        @{
+            var base64 = Convert.ToBase64String(item.Picture);
+            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        }
+        <tr>
+                <th scope="row">@item.Id</th>
+                <th>@item.Name</th>
+                <th>
+                    <img src="@imgSrc" width="50" height="50">
+                    </th>
+                <th>@item.Type</th>
+                <th>@item.IsExotic</th>
+                <th>@item.Descryption</th>
+                <th>@item.Price</th>
+                <th>
+                    <a asp-controller="Manager" asp-action="EditItem" asp-route-itemId="@item.Id">
+                    <button type="button" class="btn btn-primary btn-sm">Редактировать</button>
+                    </a>
+                </th>
+        </tr>
+        </div>
+        }
+    </tbody>
+</table>

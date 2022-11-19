@@ -75,6 +75,50 @@ namespace Siadanok.Services
             dataManager.User.SaveUser(userToSave);
         }
         /*
+         *  ManagerLogic
+         */
+        public IEnumerable<Manager> GetAllManagers()
+        {
+            return dataManager.Manager.GetAllManagers();
+        }
+        public void DeleteUser(Manager managerToDelete)
+        {
+            dataManager.Manager.DeleteManager(managerToDelete);
+        }
+        public Manager GetManagerById(string id)
+        {
+            Manager manager = dataManager.Manager.GetManagerById(id);
+            manager.Password = Base64Decode(manager.Password);
+            return manager;
+        }
+        public void SaveUser(Manager managerToSave)
+        {
+            logger.LogInformation($"Saving new user -> {managerToSave.FirstName} {managerToSave.SecondName}");
+            dataManager.Manager.SaveManager(managerToSave);
+        }
+        /*
+         *  Admin Logic
+         */
+        public IEnumerable<Admin> GetAllAdmins()
+        {
+            return dataManager.Admin.GetAllAdmins();
+        }
+        public void DeleteUser(Admin adminToDelete)
+        {
+            dataManager.Admin.DeleteAdmin(adminToDelete);
+        }
+        public Admin GetAdminById(string id)
+        {
+            Admin admin = dataManager.Admin.GetAdminById(id);
+            admin.Password = Base64Decode(admin.Password);
+            return admin;
+        }
+        public void SaveUser(Admin adminToSave)
+        {
+            logger.LogInformation($"Saving new user -> {adminToSave.FirstName} {adminToSave.SecondName}");
+            dataManager.Admin.SaveAdmin(adminToSave);
+        }
+        /*
          *  Item Logic
          */
         public IEnumerable<Item> GetAllItems()
@@ -163,6 +207,44 @@ namespace Siadanok.Services
         public void SaveItem(ReserveOrder reserveOrderToSave)
         {
             dataManager.Reserve.SaveItem(reserveOrderToSave);
+        }
+        /*
+         *  Role Logic
+         */
+        public IEnumerable<Role> GetAllRoles()
+        {
+            return dataManager.Role.GetAllRoles();
+        }
+        public void DeleteItem(Role roleToDelete)
+        {
+            dataManager.Role.DeleteItem(roleToDelete);
+        }
+        public Role GetRoleById(string id)
+        {
+            return dataManager.Role.GetRoleById(id);
+        }
+        public void SaveItem(Role roleToSave)
+        {
+            dataManager.Role.SaveItem(roleToSave);
+        }
+        /*
+         *  UserRole Logic
+         */
+        public IEnumerable<UserRole> GetAllUserRoles()
+        {
+            return dataManager.UserRole.GetAllUserRoles();
+        }
+        public void DeleteItem(UserRole userRoleToDelete)
+        {
+            dataManager.UserRole.DeleteItem(userRoleToDelete);
+        }
+        public UserRole GetUserRoleById(int id)
+        {
+            return dataManager.UserRole.GetUserRoleById(id);
+        }
+        public void SaveItem(UserRole userRoleToSave)
+        {
+            dataManager.UserRole.SaveItem(userRoleToSave);
         }
     }
 }

@@ -21,6 +21,10 @@ builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<ICartItemRepository, CartItemRepository>();
 builder.Services.AddTransient<IDeliveryOrderRepository, DeliveryOrderRepository>();
 builder.Services.AddTransient<IReserveOrderRepository, ReserveOrderRepository>();
+builder.Services.AddTransient<IRoleRepository, RoleRepository>();
+builder.Services.AddTransient<IUserRoleRepository, UserRoleRepository>();
+builder.Services.AddTransient<IManagerRepository, ManagerRepository>();
+builder.Services.AddTransient<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<DataManager>();
 builder.Services.AddScoped<Service>();
 

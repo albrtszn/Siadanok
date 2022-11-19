@@ -39,6 +39,18 @@ namespace DataBase
                 context.userRepo.Add(new User() { Id= guid, Number= "+375436386666", Password=Base64Encode("Password1234"), FirstName ="Dexter", SecondName="Horn"});
                 context.userRoleRepo.Add(new UserRole() { UserId = guid, RoleName = RoleEnum.user.ToString() });
             }
+            if (!context.managerRepo.Any())
+            {
+                string guid = Guid.NewGuid().ToString();
+                context.managerRepo.Add(new Manager() { Id=guid, Name= "mainmanager", Department="hr", FirstName= "Diana", SecondName= "Vick", Password=Base64Encode("mainmanager") });
+                context.userRoleRepo.Add( new UserRole(){ UserId=guid, RoleName=RoleEnum.manager.ToString() });
+            }
+            if (!context.adminRepo.Any())
+            {
+                string guid = Guid.NewGuid().ToString();
+                context.adminRepo.Add(new Admin() { Id = guid, Name = "mainadmin", Department = "backend", FirstName = "Alexandro", SecondName = "Swish", Password = Base64Encode("mainadmin") });
+                context.userRoleRepo.Add(new UserRole() { UserId = guid, RoleName = RoleEnum.admin.ToString() });
+            }
             if (!context.itemRepo.Any()){
                 // Exotic
                 context.itemRepo.Add(new Item() { Name = "Пьяная креветка", Picture=ImageToByteArray(@"D:\\Visual_Stidio_projects\\Siadanok\\Pictures\\PyanyeKrevetki.jpg"), Type=ItemType.Meal.ToString(), IsExotic=true.ToString(), Price = 120.00m, Descryption = "Это не шутка и не название бара, а вполне реальное китайское блюдо, весьма популярное в некоторых регионах страны. Креветку поедают живьем, но сначала она хорошенько отмокает в крепком ликере. В США креветок тоже маринуют в алкоголе, но там не пренебрегают термической обработкой этого морепродукта, чего не скажешь об азиатах с их любовью к сырой еде." });
