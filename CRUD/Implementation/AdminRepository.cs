@@ -43,6 +43,10 @@ namespace CRUD.Implementation
         }
         public void SaveAdmin(Admin adminToSave)
         {
+            if (GetAdminById(adminToSave.Id) != null)
+            {
+                DeleteAdmin(GetAdminById(adminToSave.Id));
+            }
             context.adminRepo.Add(adminToSave);
             context.SaveChanges();
         }

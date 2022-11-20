@@ -1,15 +1,18 @@
 ﻿using DataBase.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Siadanok.Models;
 using Siadanok.Services;
 
 namespace Siadanok.Controllers
 {
+    [Authorize(Roles = "manager")]
     public class Manager : Controller
     {
-        private readonly ILogger<HomeController> logger;
+        private readonly ILogger<Manager> logger;
         private Service service;
-        public Manager(ILogger<HomeController> logger,
+        public Manager(ILogger<Manager> logger,
                               Service service)
         {
             this.logger = logger;
@@ -24,6 +27,20 @@ namespace Siadanok.Controllers
         {
             return View(service.GetAllUsers().ToList());
         }
+        [HttpGet("/Manager/User/{userId}")]
+        public ActionResult BanUser(string userId)
+        {
+            ViewBag.UserIdBan = userId;
+            return View();
+        }
+        [HttpPost("/Manager/User/{userId}")]
+        public ActionResult BanUser(BanModel banModel)
+        {
+            logger.LogInformation($"BanUser: userId={banModel.UserId}, reason={banModel.Reason}");
+            service.DeleteUser(service.GetUserById(banModel.UserId));
+            return Redirect("/Manager/User");
+        }
+
         public ActionResult Item()
         {
             return View(service.GetAllItems().ToList());
@@ -36,70 +53,31 @@ namespace Siadanok.Controllers
         [HttpPost("/Manager/Item/{itemId}")]
         public ActionResult EditItem(Item itemToSave)
         {
+            //!!!
             logger.LogInformation($"EditItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
                                   $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}");
+            service.SaveItem(itemToSave);
             return Redirect("/Manager/Item");
         }
 
-
-        // GET: ManagerController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet("/Manager/Item/add")]
+        public ActionResult AddItem()
         {
             return View();
         }
-
-        // GET: ManagerController/Create
-        public ActionResult Create()
+        [HttpPost("/Manager/Item/add")]
+        public ActionResult AddItem(Item itemToSave)
         {
-            return View();
+            logger.LogInformation($"EditItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
+                                  $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}");
+            service.SaveItem(itemToSave);
+            return Redirect("/Manager/Item");
         }
 
         // POST: ManagerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ManagerController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ManagerController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ManagerController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ManagerController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {

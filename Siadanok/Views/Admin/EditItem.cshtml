@@ -3,13 +3,13 @@
 
 </br>
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/Manager/Index">Home</a></li>
-    <li class="breadcrumb-item"><a href="/Manager/Item">Item</a></li>
+    <li class="breadcrumb-item"><a href="/Admin/Index">Home</a></li>
+    <li class="breadcrumb-item"><a href="/Admin/Item">Item</a></li>
     <li class="breadcrumb-item active">EditItem</li>
 </ol>
 <hr class="my-4">
 
-<form method="post">
+<form method="post" asp-controller="Admin">
     <input type="hidden" id="Id" name="Id" value="@Model.Id">
 
     <div class="form-group">

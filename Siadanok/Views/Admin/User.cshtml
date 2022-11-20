@@ -15,7 +15,7 @@
 
 </br>
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/Manager/Index">Home</a></li>
+    <li class="breadcrumb-item"><a href="/Admin/Index">Home</a></li>
     <li class="breadcrumb-item active">User</li>
 </ol>
 <hr class="my-4">
@@ -50,7 +50,7 @@
                 <th>@user.FirstName</th>
                 <th>@user.SecondName</th>
                 <th>
-                    <a asp-controller="Manager" asp-action="BanUser" asp-route-userId="@user.Id">
+                    <a asp-controller="Admin" asp-action="BanUser" asp-route-userId="@user.Id">
                         <button type="button" class="btn btn-primary btn-sm">Заблокировать</button>
                     </a>
                 </th>

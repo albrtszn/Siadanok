@@ -64,7 +64,7 @@ namespace Siadanok.Controllers
         {
             User? user = service.GetAllUsers().ToList().Find(x => x.Number.Equals(loginModel.Login));
             DataBase.Entity.Manager? manager = service.GetAllManagers().ToList().Find(x => x.Name.Equals(loginModel.Login));
-            Admin? admin = service.GetAllAdmins().ToList().Find(x => x.Name.Equals(loginModel.Login));
+            DataBase.Entity.Admin? admin = service.GetAllAdmins().ToList().Find(x => x.Name.Equals(loginModel.Login));
 
             if (user != null) {
                 Console.WriteLine($"{user.Id},{user.Password}");

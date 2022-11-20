@@ -1,0 +1,31 @@
+﻿@using DataBase.Entity
+@model List<Role>
+
+
+</br>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/Admin/Index">Home</a></li>
+    <li class="breadcrumb-item active">Role</li>
+</ol>
+<hr class="my-4">
+
+<a asp-controller="Admin" asp-action="AddRole">
+<button class="btn btn-primary" type="submit">Добавить роль</button>
+</a>
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">RoleName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+        <tr>
+                <th>@role.RoleName</th>
+        </tr>
+        }
+    </tbody>
+</table>

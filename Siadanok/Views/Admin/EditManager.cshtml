@@ -1,0 +1,52 @@
+﻿@using DataBase.Entity
+@model List<Role>
+
+</br>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/Admin/Index">Home</a></li>
+    <li class="breadcrumb-item"><a href="/Admin/Manager">Manager</a></li>
+    <li class="breadcrumb-item active">EditManager</li>
+</ol>
+<hr class="my-4">
+
+<form method="post" asp-controller="Admin">
+    <input type="hidden" name="Id" value="@ViewBag.managerId">
+
+    <div class="form-group">
+        <label class="col-form-label mt-4" for="inputDefault">Логин</label>
+        <input type="text" class="form-control" name="Name" placeholder="Name" id="Name" value="@ViewBag.managerName">
+    </div>
+
+    <div class="form-group">
+        <label class="col-form-label mt-4" for="inputDefault">Пароль</label>
+       
+        <input type="text" class="form-control" name="Password" placeholder="Password" id="Password" value="@ViewBag.password">
+    </div>
+    
+    <div class="form-group">
+        <label class="col-form-label mt-4" for="inputDefault">Отдел</label>
+        <input type="text" class="form-control" name="Department" placeholder="Department" id="Department" value="@ViewBag.department">
+    </div>
+
+    <div class="form-group">
+        <label class="col-form-label mt-4" for="inputDefault">Имя сотрудник</label>
+        <input type="text" class="form-control" name="FirstName" placeholder="FirstName" id="FirstName" value="@ViewBag.firstname">
+    </div>
+
+    <div class="form-group">
+        <label class="col-form-label mt-4" for="inputDefault">Фамилия сотрудника</label>
+        <input type="text" class="form-control" name="SecondName" placeholder="SecondName" id="SecondName" value="@ViewBag.secondname">
+    </div>
+
+    <div class="form-group">
+        <label for="exampleSelect1" class="form-label mt-4">Роли сотрудника</label>
+        <select class="form-select" name="Role" value="manager" id="Role">
+            @foreach(var role in Model){
+            <option>@role.RoleName</option>
+            }
+        </select>
+    </div>
+
+    </br>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Изменить</button>
+</form>

@@ -31,9 +31,18 @@ namespace CRUD.Implementation
         {
             return context.roleRepo.FirstOrDefault(x => x.RoleName == id);
         }
+        public void DeleteRole(Role roleToDelete)
+        {
+            context.roleRepo.Remove(roleToDelete);
+            context.SaveChanges();
+        }
 
         public void SaveItem(Role roleToSave)
         {
+            if (GetRoleById(roleToSave.RoleName) != null)
+            {
+                DeleteRole(GetRoleById(roleToSave.RoleName));
+            }
             context.roleRepo.Add(roleToSave);
             context.SaveChanges();
         }

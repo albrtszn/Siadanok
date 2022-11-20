@@ -1,0 +1,18 @@
+﻿</br>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/Manager/Index">Home</a></li>
+    <li class="breadcrumb-item"><a href="/Manager/User">User</a></li>
+    <li class="breadcrumb-item active">BanUser</li>
+</ol>
+<hr class="my-4">
+
+<form method="post" asp-action="BanUser">
+    <input type="hidden" id="Id" name="Id" value="@ViewBag.UserIdBan">
+
+    <div class="form-group">
+        <label for="exampleTextarea" class="form-label mt-4">Причина бана</label>
+        <textarea class="form-control" name="Reason" id="exampleTextarea" rows="3"></textarea>
+    </div>
+    </br>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Забанить</button>
+</form>

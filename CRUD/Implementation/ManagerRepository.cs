@@ -43,6 +43,10 @@ namespace CRUD.Implementation
         }
         public void SaveManager(Manager managerToSave)
         {
+            if (GetManagerById(managerToSave.Id)!=null)
+            {
+                DeleteManager(GetManagerById(managerToSave.Id));
+            }
             context.managerRepo.Add(managerToSave);
             context.SaveChanges();
         }

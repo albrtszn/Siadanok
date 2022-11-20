@@ -1,22 +1,16 @@
-﻿@using DataBase.Entity
-@model Item
-
-</br>
+﻿</br>
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/Manager/Index">Home</a></li>
-    <li class="breadcrumb-item"><a href="/Manager/Item">Item</a></li>
-    <li class="breadcrumb-item active">EditItem</li>
+    <li class="breadcrumb-item"><a href="/Admin/Index">Home</a></li>
+    <li class="breadcrumb-item"><a href="/Admin/Item">Item</a></li>
+    <li class="breadcrumb-item active">add</li>
 </ol>
 <hr class="my-4">
 
-<form method="post">
-    <input type="hidden" id="Id" name="Id" value="@Model.Id">
-
+<form method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label class="col-form-label mt-4" for="inputDefault">Name</label>
-        <input type="text" class="form-control" name="Name" placeholder="Name" id="Name" value="@Model.Name">
+        <input type="text" class="form-control" name="Name" placeholder="Name" id="Name" value="">
     </div>
-
     <fieldset class="form-group">
         <legend class="mt-4">Это экзотичное блюдо</legend>
         <div class="form-check">
@@ -35,17 +29,17 @@
 
     <div class="form-group">
         <label for="exampleTextarea" class="form-label mt-4">Описание</label>
-        <textarea class="form-control" name="Descryption" id="exampleTextarea" rows="3">@Model.Descryption</textarea>
+        <textarea class="form-control" name="Descryption" id="exampleTextarea" rows="3"></textarea>
     </div>
 
     <div class="form-group">
         <label for="formFile" class="form-label mt-4">Картинка</label>
-        <input class="form-control" type="file" id="formFile">
+        <input class="form-control" type="file" name="Picture" id="formFile">
     </div>
 
     <div class="form-group">
         <label for="exampleSelect1" class="form-label mt-4">Example select</label>
-        <select class="form-select" name="Type" value="@Model.Type" id="Type">
+        <select class="form-select" name="Type" value="" id="Type">
             <option>Drink</option>
             <option>Soup</option>
             <option>Meal</option>
@@ -55,8 +49,8 @@
 
     <div class="form-group">
         <label class="col-form-label mt-4" for="inputDefault">Цена</label>
-        <input type="text" class="form-control" placeholder="Price" name="Price" value="@Model.Price" id="Price">
+        <input type="text" class="form-control" placeholder="Price" name="Price" value="" id="Price">
     </div>
-    </br>
+    <br></br>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Изменить</button>
 </form>

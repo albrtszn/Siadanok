@@ -1,0 +1,55 @@
+﻿@using DataBase.Entity
+@model List<Manager>
+
+</br>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/Admin/Index">Home</a></li>
+    <li class="breadcrumb-item active">Manager</li>
+</ol>
+<hr class="my-4">
+
+<a asp-controller="Admin" asp-action="AddManager">
+    <button class="btn btn-primary" type="button">Добавить товар</button>
+</a>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Login</th>
+            <th scope="col">Password</th>
+            <th scope="col">Department</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">SecondName</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var manager in Model)
+        {
+            <div>
+                @{
+                    //var base64 = Convert.ToBase64String(user.Picture);
+                    // var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                }
+            <tr>
+                <th scope="row">@manager.Id</th>
+                <th>@manager.Name</th>
+                <th>@manager.Password</th>
+                <th>@manager.Department</th>
+                <th>@manager.FirstName</th>
+                <th>@manager.SecondName</th>
+                <th>
+                    <a asp-controller="Admin" asp-action="BanManager" asp-route-managerId="@manager.Id">
+                        <button type="button" class="btn btn-primary btn-sm">Заблокировать</button>
+                    </a>
+                    <br></br>
+                    <a asp-controller="Admin" asp-action="EditManager" asp-route-managerId="@manager.Id">
+                        <button type="button" class="btn btn-primary btn-sm">Изменить</button>
+                    </a>
+                </th>
+            </tr>
+            </div>
+        }
+    </tbody>
+</table>

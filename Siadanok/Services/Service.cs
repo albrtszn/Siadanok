@@ -19,7 +19,7 @@ namespace Siadanok.Services
         /*
          *  Convert Logic
          */
-        private static byte[] ImageToByteArray(string path)
+        public static byte[] ImageToByteArray(string path)
         {
             Image pic = Image.FromFile(path);
             using (var ms = new MemoryStream())
@@ -37,6 +37,14 @@ namespace Siadanok.Services
         {
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+        public static byte[] IFormFileToByteArray(IFormFile file)
+        {
+            using var fileStream = file.OpenReadStream();
+            byte[] bytes = new byte[file.Length];
+            fileStream.Read(bytes, 0, (int)file.Length);
+
+            return bytes;
         }
         /*
          *  User Logic
@@ -81,7 +89,7 @@ namespace Siadanok.Services
         {
             return dataManager.Manager.GetAllManagers();
         }
-        public void DeleteUser(Manager managerToDelete)
+        public void DeleteManager(Manager managerToDelete)
         {
             dataManager.Manager.DeleteManager(managerToDelete);
         }
@@ -91,7 +99,7 @@ namespace Siadanok.Services
             manager.Password = Base64Decode(manager.Password);
             return manager;
         }
-        public void SaveUser(Manager managerToSave)
+        public void SaveManager(Manager managerToSave)
         {
             logger.LogInformation($"Saving new user -> {managerToSave.FirstName} {managerToSave.SecondName}");
             dataManager.Manager.SaveManager(managerToSave);
@@ -234,7 +242,7 @@ namespace Siadanok.Services
         {
             return dataManager.UserRole.GetAllUserRoles();
         }
-        public void DeleteItem(UserRole userRoleToDelete)
+        public void DeleteUserRole(UserRole userRoleToDelete)
         {
             dataManager.UserRole.DeleteItem(userRoleToDelete);
         }
@@ -242,7 +250,7 @@ namespace Siadanok.Services
         {
             return dataManager.UserRole.GetUserRoleById(id);
         }
-        public void SaveItem(UserRole userRoleToSave)
+        public void SaveUserRole(UserRole userRoleToSave)
         {
             dataManager.UserRole.SaveItem(userRoleToSave);
         }

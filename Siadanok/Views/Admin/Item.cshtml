@@ -15,14 +15,15 @@
 
 </br>
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/Manager/Index">Home</a></li>
+    <li class="breadcrumb-item"><a href="/Admin/Index">Home</a></li>
     <li class="breadcrumb-item active">Item</li>
 </ol>
 <hr class="my-4">
 
-<a asp-controller="Manager" asp-action="AddItem">
-    <button class="btn btn-primary" type="submit">Добавить товар</button>
+<a asp-controller="Admin" asp-action="AddItem">
+<button class="btn btn-primary" type="submit">Добавить товар</button>
 </a>
+
 
 <table class="table table-hover">
     <thead>
@@ -56,8 +57,12 @@
                 <th>@item.Descryption</th>
                 <th>@item.Price</th>
                 <th>
-                    <a asp-controller="Manager" asp-action="EditItem" asp-route-itemId="@item.Id">
+                    <a asp-controller="Admin" asp-action="EditItem" asp-route-itemId="@item.Id">
                     <button type="button" class="btn btn-primary btn-sm">Редактировать</button>
+                    </a>
+                    <br></br>
+                    <a asp-controller="Admin" asp-action="DeleteItem" asp-route-itemId="@item.Id">
+                        <button type="button" class="btn btn-primary btn-sm">Удалить</button>
                     </a>
                 </th>
         </tr>

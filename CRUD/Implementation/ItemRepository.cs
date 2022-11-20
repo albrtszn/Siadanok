@@ -32,6 +32,10 @@ namespace CRUD.Implementation
 
         public void SaveItem(Item itemToSave)
         {
+            if (GetById(itemToSave.Id) != null)
+            {
+                DeleteItem(GetById(itemToSave.Id));
+            }
             context.itemRepo.Add(itemToSave);
             context.SaveChanges();
         }
