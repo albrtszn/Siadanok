@@ -42,10 +42,28 @@ namespace Siadanok.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(User userToSave)
+        public async Task<IActionResult> Register(User userToSave)
         {
+            if (HttpContext.Request.Form.Files.Count!=0) {
+                IFormFileCollection files = HttpContext.Request.Form.Files;
+                userToSave.Picture = Service.IFormFileToByteArray(files[0]);
+            }
+            userToSave.Id = Guid.NewGuid().ToString();
+            userToSave.Password = Service.Base64Encode(userToSave.Password);
             service.SaveUser(userToSave);
-            //create a cookie
+
+            var props = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.Add(TimeSpan.FromHours(1))
+            };
+
+            var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.user.ToString()) };
+            // создаем объект ClaimsIdentity
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+            // установка аутентификационных куки
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), props);
+             //create a cookie
             CookieOptions option = new CookieOptions();
             option.Expires = DateTimeOffset.Now.AddHours(1);
             Response.Cookies.Append("userId", userToSave.Id.ToString(), option);
@@ -66,6 +84,12 @@ namespace Siadanok.Controllers
             DataBase.Entity.Manager? manager = service.GetAllManagers().ToList().Find(x => x.Name.Equals(loginModel.Login));
             DataBase.Entity.Admin? admin = service.GetAllAdmins().ToList().Find(x => x.Name.Equals(loginModel.Login));
 
+            var props = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.Add(TimeSpan.FromHours(1))
+            };
+
             if (user != null) {
                 Console.WriteLine($"{user.Id},{user.Password}");
                 if (Service.Base64Decode(user.Password).Equals(loginModel.Password))
@@ -80,7 +104,7 @@ namespace Siadanok.Controllers
                     // создаем объект ClaimsIdentity
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                     // установка аутентификационных куки
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), props);
                 }
                 return Redirect(returnUrl ?? "/");
             }
@@ -99,7 +123,7 @@ namespace Siadanok.Controllers
                     // создаем объект ClaimsIdentity
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                     // установка аутентификационных куки
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), props);
                 }
                 return Redirect(returnUrl ?? "/");
             }
@@ -118,7 +142,7 @@ namespace Siadanok.Controllers
                     // создаем объект ClaimsIdentity
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                     // установка аутентификационных куки
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,  new ClaimsPrincipal(claimsIdentity), props);
                 }
                 return Redirect(returnUrl ?? "/");
             }
@@ -143,16 +167,6 @@ namespace Siadanok.Controllers
         {
             ViewBag.message = Request.Cookies["userId"];
             return View(service.GetAllItems());
-        }
-        [Authorize(Roles = "manager")]
-        public string manager()
-        {
-            return "manager";
-        }
-        [Authorize(Roles = "admin")]
-        public string admin()
-        {
-            return "admin";
         }
         //[HttpPost]
         [Authorize(Roles = "user")]

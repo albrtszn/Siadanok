@@ -13,19 +13,20 @@
 </div>
 <main class="form-signin">
   <form action="/Home/Login" method="post">
-    <img class="mb-4" src="./entry_files/bootstrap-logo.svg" alt="" width="72" height="57">
     <h1 class="h3 mb-3 fw-normal">Пожалуйста, войдите</h1>
-
+        <hr class="my-4">
         <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
 
     <div class="form-floating">
       <input type="text" name="Login" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
       <label for="floatingInput">Номер телефона</label>
     </div>
+    </br>
     <div class="form-floating">
       <input type="password" name="Password" class="form-control" id="floatingPassword" placeholder="Password">
       <label for="floatingPassword">Пароль</label>
     </div>
+    </br>
 
     <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
   </form>

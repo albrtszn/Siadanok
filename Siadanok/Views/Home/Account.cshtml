@@ -4,24 +4,20 @@
 @model UserModel
 <section style="background-color: #eee;">
     <div class="container py-5">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">User</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-lg-4">
                 <div class="card mb-4">
                     <div class="card-body text-center">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                             class="rounded-circle img-fluid" style="width: 150px;">
+                        @{
+                            var imgSrc = "/avatar.webp";
+                            if (Model.Picture != null)
+                            {
+                                var base64 = Convert.ToBase64String(Model.Picture);
+                                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                            }
+                        }
+                        <img src="@imgSrc" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                         <h5 class="my-3">@Model.FirstName @Model.SecondName</h5>
                     </div>
                 </div>
@@ -49,44 +45,47 @@
                         <hr>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
+                        <div class="card mb-4 mb-md-0" style="width:contain;">
                             <div class="card-body">
-                                <table>
-                                    <tr>
-                                        <td>Название</td>
-                                        <td>Тип</td>
-                                        <td>Цена</td>
-                                    </tr>
-                                    @foreach (var item in Model.ListItems)
-                                    {
+                                <h5>Ваши покупки</h5>
+                                <hr class="my-4">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>@item.Name</td>
-                                            @if (@item.Type.Equals("Meal"))
-                                            {
-                                                <td>Второе блюдо</td>
-                                            }
-                                            @if (@item.Type.Equals("Soup"))
-                                            {
-                                                <td>Первое блюдо</td>
-                                            }
-                                            @if (@item.Type.Equals("Drink"))
-                                            {
-                                                <td>Напитки</td>
-                                            }
-                                            @if (@item.Type.Equals("Dessert"))
-                                            {
-                                                <td>Дессерт</td>
-                                            }
-                                            <td>@item.Price</td>
+                                            <td>Название</td>
+                                            <td>Тип</td>
+                                            <td>Цена</td>
                                         </tr>
-                                    }
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.ListItems)
+                                        {
+                                            <tr>
+                                                <td>@item.Name</td>
+                                                @if (@item.Type.Equals("Meal"))
+                                                {
+                                                    <td>Второе блюдо</td>
+                                                }
+                                                @if (@item.Type.Equals("Soup"))
+                                                {
+                                                    <td>Первое блюдо</td>
+                                                }
+                                                @if (@item.Type.Equals("Drink"))
+                                                {
+                                                    <td>Напитки</td>
+                                                }
+                                                @if (@item.Type.Equals("Dessert"))
+                                                {
+                                                    <td>Дессерт</td>
+                                                }
+                                                <td>@item.Price</td>
+                                            </tr>
+                                        }
+                                    </tbody>
                                 </table>
+
                             </div>
                         </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

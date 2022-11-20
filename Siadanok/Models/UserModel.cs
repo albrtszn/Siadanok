@@ -6,6 +6,7 @@ namespace Siadanok.Models
     public class UserModel
     {
         public string Number { get; set; }
+        public byte[]? Picture { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }

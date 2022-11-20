@@ -2,24 +2,37 @@
 @using DataBase.Entity;
 @using Siadanok.Services
 
-<form action="/Home/Register" method="post">
-        <table>
-                <tr>
-                    <td>Имя:</td>
-                    <td><input type="text" name="FirstName" value=""/> </td>
-                </tr>
-                <tr>
-                    <td>Фамилия:</td>
-                    <td><input type="text" name="SecondName" value=""/></td>
-                </tr>
-                <tr>
-                    <td>Номер:</td>
-                    <td><input type="text" name="Number" value=""/></td>
-                </tr>
-                <tr>
-                    <td>Пароль:</td>
-                    <td><input type="text" name="Password" value=""/></td>
-                </tr>
-                <tr><td><input type="submit"/> </td><td></td></tr>
-            </table>
+
+<main class="form-signin">
+<form action="/Home/Register" method="post" enctype="multipart/form-data">
+
+        <h1 class="h3 mb-3 fw-normal">Пожалуйста, зарегистрируйтесь</h1>
+        <hr class="my-4">
+        <div class="form-floating">
+            <input type="text" name="Number" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+            <label for="floatingInput">Номер телефона</label>
+        </div>
+        </br>
+        <div class="form-floating">
+            <input type="text" name="Password" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+            <label for="floatingInput">Пароль</label>
+        </div>
+        </br>
+        <div class="form-floating">
+            <input type="text" name="FirstName" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+            <label for="floatingInput">Имя</label>
+        </div>
+        </br>
+        <div class="form-floating">
+            <input type="text" name="SecondName" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+            <label for="floatingInput">Фамилия</label>
+        </div>
+        </br>
+        <div class="form-group">
+            <label for="formFile" class="form-label mt-4">Картинка</label>
+            <input class="form-control" type="file" name="Picture" id="formFile">
+        </div>
+        </br>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Регистрация</button>
         </form>
+</main>

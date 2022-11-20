@@ -11,14 +11,14 @@
 </head>
 <body>
     
-     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">Siadanok</a>
+          <a class="navbar-brand" href="/">C'яданак</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav me-auto" style="text-align:right;">
               <li class="nav-item">
                 <a class="nav-link" href="/Home/Menu">Меню</a>
               </li>
@@ -31,37 +31,31 @@
               <li class="nav-item">
                 <a class="nav-link" href="/Home/Contacts">Контакты</a>
               </li>
-            @if (ViewBag.message == null)
-            {
-              <li class="nav-item">
-                <a class="nav-link" href="/Home/Login">Войти</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/Home/Register">Регистрация</a>
-              </li>
-                
-             }else{
-              <li class="nav-item">
-                <a class="nav-link" asp-controller="Home" asp-action="Account" asp-route-userId=@ViewBag.message>Аккаунт</a>
-              </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Личный кабинет</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Home" asp-action="Account" asp-route-userId=@ViewBag.message>Аккаунт</a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="Cart" asp-route-userId=@ViewBag.message>Корзина</a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="LogOut" asp-route-userId=@ViewBag.message>Выйти</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Separated link</a>
-                            </div>
-                        </li>
-             }
+             
               
             </ul>
-            <form class="d-flex">
-              <input class="form-control me-sm-2" type="text" placeholder="Search">
-              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
+
+                @if (ViewBag.message == null)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style=" float:right; color:darkgray;" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Войти в аккаунт</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-controller="Home" asp-action="Login" >Войти</a>
+                            <a class="dropdown-item" asp-controller="Home" asp-action="Register">Регистрация</a>
+                        </li>
+                }
+                else
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="float:right; color:darkgray;" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Личный кабинет</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-controller="Home" asp-action="Account" asp-route-userId=@ViewBag.message>Аккаунт</a>
+                            <a class="dropdown-item" asp-controller="Home" asp-action="Cart" asp-route-userId=@ViewBag.message>Корзина</a>
+                            <a class="dropdown-item" style="color:red;" asp-controller="Home" asp-action="LogOut" asp-route-userId=@ViewBag.message>Выйти</a>
+                        </div>
+                    </li>
+                }
+            
           </div>
         </div>
       </nav>
@@ -170,13 +164,12 @@
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-            <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+            <p><i class="fas fa-home me-3"></i> Витебск, Большая Советская ул., д. 20</p>
             <p>
               <i class="fas fa-envelope me-3"></i>
               info@example.com
             </p>
-            <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
-            <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+            <p><i class="fas fa-phone me-3"></i> +375 29 022-50-50</p>
           </div>
           <!-- Grid column -->
         </div>
@@ -185,6 +178,11 @@
     </section>
     <!-- Section: Links  -->
   
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+
     <!-- Copyright -->
     <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
       © 2022 Copyright:
@@ -193,9 +191,5 @@
     <!-- Copyright -->
   </footer>
   <!-- Footer -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

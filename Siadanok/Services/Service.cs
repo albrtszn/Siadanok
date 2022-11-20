@@ -75,7 +75,7 @@ namespace Siadanok.Services
                     items.Add(GetItemById(cartItem.ItemId));
                 }
             }
-            return new UserModel() { FirstName=user.FirstName, SecondName=user.SecondName,  Number=user.Number , ListItems = items };
+            return new UserModel() { FirstName=user.FirstName, SecondName=user.SecondName, Picture=user.Picture,  Number=user.Number , ListItems = items };
         }
         public void SaveUser(User userToSave)
         {
