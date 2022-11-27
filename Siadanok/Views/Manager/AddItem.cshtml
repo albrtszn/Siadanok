@@ -6,7 +6,7 @@
 </ol>
 <hr class="my-4">
 
-<form method="post" asp-controller="Manager">
+<form method="post" enctype="multipart/form-data">
 
     <div class="form-group">
         <label class="col-form-label mt-4" for="inputDefault">Name</label>
@@ -35,7 +35,7 @@
 
     <div class="form-group">
         <label for="formFile" class="form-label mt-4">Картинка</label>
-        <input class="form-control" type="file" id="formFile">
+        <input class="form-control" type="file" name="Picture" id="formFile">
     </div>
 
     <div class="form-group">
@@ -53,5 +53,5 @@
         <input type="text" class="form-control" placeholder="Price" name="Price" value="" id="Price">
     </div>
     </br>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Изменить</button>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Добавить</button>
 </form>

@@ -98,6 +98,7 @@ namespace Siadanok.Controllers
             logger.LogInformation($"EditItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
                                   $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}");
             IFormFileCollection files = HttpContext.Request.Form.Files;
+            if(files.Count != 0)
             itemToSave.Picture = Service.IFormFileToByteArray(files[0]);
             service.SaveItem(itemToSave);
             return Redirect("/Manager/Item");
