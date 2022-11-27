@@ -32,6 +32,7 @@ namespace Siadanok.Controllers
         {
             if (Request.Cookies["userId"] != null)
             {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
                 ViewBag.message = Request.Cookies["userId"];
             }
             return View();
@@ -44,13 +45,16 @@ namespace Siadanok.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(User userToSave)
         {
-            if (HttpContext.Request.Form.Files.Count!=0) {
+            if (HttpContext.Request.Form.Files.Count != 0) {
                 IFormFileCollection files = HttpContext.Request.Form.Files;
                 userToSave.Picture = Service.IFormFileToByteArray(files[0]);
             }
-            userToSave.Id = Guid.NewGuid().ToString();
+            string guid = Guid.NewGuid().ToString();
+            userToSave.Id = guid;
             userToSave.Password = Service.Base64Encode(userToSave.Password);
             service.SaveUser(userToSave);
+
+            service.SaveUserRole(new UserRole() { UserId = guid, RoleName = RoleEnum.user.ToString() }); ;
 
             var props = new AuthenticationProperties
             {
@@ -59,16 +63,12 @@ namespace Siadanok.Controllers
             };
 
             var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.user.ToString()) };
-            // создаем объект ClaimsIdentity
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-            // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), props);
-             //create a cookie
+
             CookieOptions option = new CookieOptions();
             option.Expires = DateTimeOffset.Now.AddHours(1);
             Response.Cookies.Append("userId", userToSave.Id.ToString(), option);
-            //Response.Cookies.Append("cart", "", option);
-            //HttpCookie userCookies = new HttpCookie();
             return RedirectToAction("Index", "Home");
         }
         [HttpGet]
@@ -83,6 +83,10 @@ namespace Siadanok.Controllers
             User? user = service.GetAllUsers().ToList().Find(x => x.Number.Equals(loginModel.Login));
             DataBase.Entity.Manager? manager = service.GetAllManagers().ToList().Find(x => x.Name.Equals(loginModel.Login));
             DataBase.Entity.Admin? admin = service.GetAllAdmins().ToList().Find(x => x.Name.Equals(loginModel.Login));
+
+            if (!ModelState.IsValid) {
+                ModelState.AddModelError("Login","error - login");
+            }
 
             var props = new AuthenticationProperties
             {
@@ -99,6 +103,7 @@ namespace Siadanok.Controllers
                     Response.Cookies.Append("userId", user.Id.ToString(), option);
                     //Response.Cookies.Append("cart", null, option);
                     ViewBag.message = Request.Cookies["userId"];
+                    ViewBag.role = service.GetAllUserRoles().ToList().Find(x=>x.UserId.Equals(user.Id)).RoleName;
 
                     var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.user.ToString()) };
                     // создаем объект ClaimsIdentity
@@ -111,13 +116,14 @@ namespace Siadanok.Controllers
             if (manager != null)
             {
                 Console.WriteLine($"{manager.Id},{manager.Password}");
-                if (Service.Base64Decode(manager.Password).Equals(loginModel.Password))
+                if (manager.Password.Equals(loginModel.Password))
                 {
                     CookieOptions option = new CookieOptions();
                     option.Expires = DateTimeOffset.Now.AddHours(1);
                     Response.Cookies.Append("userId", manager.Id.ToString(), option);
                     //Response.Cookies.Append("cart", null, option);
                     ViewBag.message = Request.Cookies["userId"];
+                    ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(manager.Id)).RoleName;
 
                     var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.manager.ToString()) };
                     // создаем объект ClaimsIdentity
@@ -137,12 +143,13 @@ namespace Siadanok.Controllers
                     Response.Cookies.Append("userId", admin.Id.ToString(), option);
                     //Response.Cookies.Append("cart", null, option);
                     ViewBag.message = Request.Cookies["userId"];
+                    ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(admin.Id)).RoleName;
 
                     var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.admin.ToString()) };
                     // создаем объект ClaimsIdentity
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                     // установка аутентификационных куки
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,  new ClaimsPrincipal(claimsIdentity), props);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), props);
                 }
                 return Redirect(returnUrl ?? "/");
             }
@@ -159,19 +166,72 @@ namespace Siadanok.Controllers
         }
         public IActionResult Privacy()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View();
         }
         [Authorize(Roles = "user")]
         [HttpGet]
         public IActionResult Menu()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             ViewBag.message = Request.Cookies["userId"];
             return View(service.GetAllItems());
+        }
+        [Authorize(Roles="user")]
+        [HttpPost]
+        public IActionResult Menu(string sort, string filt)
+        {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+
+            List<Item> items = service.GetAllItems().ToList();
+            logger.LogInformation($"PostMenu: filt={filt}, sort={sort}");
+
+            switch (sort)
+            {
+                case "Price":
+                    items.Sort(delegate (Item x, Item y) {
+                        if (x.Price == null && y.Price == null) return 0;
+                        else if (x.Price == null) return -1;
+                        else if (y.Price == null) return -1;
+                        else return x.Price.CompareTo(y.Price);
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+            switch (filt) {
+                case "Meal":
+                    var items1  = items.Where(x => x.Type.Equals("Meal"));
+                    foreach (var item in items)
+                    {
+                        logger.LogInformation($"item: Id={item.Id}, Type={item.Type}");
+                    }
+                return View(items.Where(x => x.Type.Equals("Meal")).ToList());
+                    break;
+
+                case "Soup":
+                    return View(items.Where(x => x.Type.Equals("Soup")).ToList());
+                    break;
+
+                case "Drink":
+                    return View(items.Where(x => x.Type.Equals("Drink")).ToList());
+                    break;
+
+                case "Dessert":
+                    return View(items.Where(x => x.Type.Equals("Dessert")).ToList());
+                    break;
+
+                default:
+                    return View(items);
+                    break;
+            }
         }
         //[HttpPost]
         [Authorize(Roles = "user")]
         public IActionResult addCartItem(int itemId)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             if (Request.Cookies["cart"] == null)
             {
                 List<CartItem> listCart = new List<CartItem>();
@@ -207,6 +267,7 @@ namespace Siadanok.Controllers
         [Authorize(Roles = "user")]
         public IActionResult Order()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             ViewBag.message = Request.Cookies["userId"];
             return View();
         }
@@ -215,6 +276,7 @@ namespace Siadanok.Controllers
         public IActionResult Order(OrderModel model)
         {
             ViewBag.message = Request.Cookies["userId"];
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             logger.LogInformation($"New Order -> orderType={model.OrderType}, payMeythd={model.PayMethod}, city={model.City}, street={model.Street}," +
                                   $" building={model.Building}, appartment={model.Apartment}, comment={model.Comment}" +
                                   $" Table={model.Table}, DateTime={model.DateTime}");
@@ -241,6 +303,7 @@ namespace Siadanok.Controllers
                     cartItem.CartId = cartId;
                     service.SaveItem(cartItem);
                 }
+                Response.Cookies.Delete("cart");
             }
             if (model.OrderType.Equals("Reserve"))
             {
@@ -263,12 +326,13 @@ namespace Siadanok.Controllers
                 }
                 Response.Cookies.Delete("cart");
             }
-            return View();
+            return Redirect("Index");
         }
 
         [Authorize(Roles = "user")]
         public IActionResult buyItems()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             List<CartItem> listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);
             string cartId = Guid.NewGuid().ToString();
             foreach (CartItem cartItem in listCart)
@@ -283,6 +347,7 @@ namespace Siadanok.Controllers
         [Authorize(Roles = "user")]
         public IActionResult Account()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             ViewBag.message = Request.Cookies["userId"];
             return View(service.GetUserModel(Request.Cookies["userId"]));
         }
@@ -290,6 +355,7 @@ namespace Siadanok.Controllers
         [Authorize(Roles = "user")]
         public IActionResult Cart()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             ViewBag.message = Request.Cookies["userId"];
             if (Request.Cookies["cart"] != null) {
                 

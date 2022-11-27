@@ -1,30 +1,27 @@
-﻿
+﻿@model LoginModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Home Page";
 }
-<style>
 
-    </style>
-</style>
-
-<div class="text-center">
-    <h1 class="display-4">Main</h1>
-    <h3>@ViewBag.message</h3>
-</div>
 <main class="form-signin">
   <form action="/Home/Login" method="post">
+    </br>
     <h1 class="h3 mb-3 fw-normal">Пожалуйста, войдите</h1>
         <hr class="my-4">
         <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
 
     <div class="form-floating">
-      <input type="text" name="Login" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
-      <label for="floatingInput">Номер телефона</label>
+      <input type="text" asp-for="Login" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+      <label asp-for="Login" for="floatingInput">Номер телефона</label>
+            <span class="badge bg-danger" asp-validation-for="Login"></span>
     </div>
     </br>
+
     <div class="form-floating">
-      <input type="password" name="Password" class="form-control" id="floatingPassword" placeholder="Password">
-      <label for="floatingPassword">Пароль</label>
+      <input type="password" asp-for="Password" class="form-control" id="floatingPassword" placeholder="Password">
+      <label asp-for="Password" for="floatingPassword">Пароль</label>
+            <span class="badge bg-danger" asp-validation-for="Password"></span>
     </div>
     </br>
 

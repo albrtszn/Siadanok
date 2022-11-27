@@ -1,4 +1,5 @@
 ﻿using DataBase.Entity;
+using DataBase.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,21 +22,25 @@ namespace Siadanok.Controllers
         // GET: ManagerController
         public ActionResult Index()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View();
         }
         public ActionResult User()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View(service.GetAllUsers().ToList());
         }
         [HttpGet("/Admin/User/{userId}")]
         public ActionResult BanUser(string userId)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             ViewBag.UserIdBan = userId;
             return View();
         }
         [HttpPost("/Admin/User/{userId}")]
         public ActionResult BanUser(BanModel banModel)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             logger.LogInformation($"BanUser: userId={banModel.UserId}, reason={banModel.Reason}");
             service.DeleteUser(service.GetUserById(banModel.UserId));
             return Redirect("/Admin/User");
@@ -43,34 +48,40 @@ namespace Siadanok.Controllers
 
         public ActionResult Item()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View(service.GetAllItems().ToList());
         }
         [HttpGet("/Admin/Item/{itemId}")]
         public ActionResult EditItem(int itemId)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View(service.GetItemById(itemId));
         }
         [HttpPost("/Admin/Item/{itemId}")]
         public ActionResult EditItem(Item itemToSave)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             IFormFileCollection files = HttpContext.Request.Form.Files;
             foreach (IFormFile file in files)
             {
                 logger.LogInformation($"EditItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
                                   $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}");
             }
-            
+
+            itemToSave.Picture = Service.IFormFileToByteArray(files[0]);
             service.SaveItem(itemToSave);
             return Redirect("/Admin/Item");
         }
         [HttpGet("/Admin/Item/add")]
         public ActionResult AddItem()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View();
         }
         [HttpPost("/Admin/Item/add")]
         public ActionResult AddItem(Item itemToSave)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             IFormFileCollection files = HttpContext.Request.Form.Files;
                 logger.LogInformation($"AddItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
                       $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}, " +
@@ -84,6 +95,7 @@ namespace Siadanok.Controllers
         [HttpGet("/Admin/Item/{itemId}/delete")]
         public ActionResult DeleteItem(int itemId)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             logger.LogInformation($"DeleteItem: id={itemId}");
             service.DeleteItem(service.GetItemById(itemId));
             return Redirect("/Admin/Item");
@@ -91,17 +103,20 @@ namespace Siadanok.Controllers
 
         public ActionResult Manager()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View(service.GetAllManagers().ToList());
         }
         [HttpGet("/Admin/Manager/{managerId}/ban")]
         public ActionResult BanManager(string managerId)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             ViewBag.managerId = managerId;
             return View(service.GetAllManagers().ToList());
         }
         [HttpPost("/Admin/Manager/{managerId}/ban")]
         public ActionResult BanManager(BanModel banModel)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             logger.LogInformation($"BanManager: Id={banModel.UserId}, Reason={banModel.Reason}");
             service.DeleteManager(service.GetManagerById(banModel.UserId));
             return Redirect("/Admin/Manager");
@@ -110,6 +125,7 @@ namespace Siadanok.Controllers
         [HttpGet("/Admin/Manager/{managerId}")]
         public ActionResult EditManager(string managerId)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             DataBase.Entity.Manager manager = service.GetManagerById(managerId);
             ViewBag.managerId = managerId;
             ViewBag.managerName = manager.Name;
@@ -127,6 +143,7 @@ namespace Siadanok.Controllers
         [HttpPost("/Admin/Manager/{managerId}")]
         public ActionResult EditManager(ManagerModel maangerToSave)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             logger.LogInformation($"EditItem: Name={maangerToSave.Name}, Password={maangerToSave.Password}, " +
                                   $"Department={maangerToSave.Department}, FirstName={maangerToSave.FirstName}," +
                                   $" SecondName={maangerToSave.SecondName}, Role={maangerToSave.Role}");
@@ -146,32 +163,45 @@ namespace Siadanok.Controllers
         [HttpGet("/Admin/Manager/add")]
         public ActionResult AddManager()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View();
         }
         [HttpPost("/Admin/Manager/add")]
         public ActionResult AddManager(DataBase.Entity.Manager maangerToSave)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             //id
             logger.LogInformation($"EditItem: Name={maangerToSave.Name}, Password={maangerToSave.Password}, " +
                                   $"Department={maangerToSave.Department}, FirstName={maangerToSave.FirstName}," +
                                   $" SecondName={maangerToSave.SecondName}");
+
+            string guid = Guid.NewGuid().ToString();
+            maangerToSave.Id = guid;
+            service.SaveManager(maangerToSave);
+
+            service.SaveUserRole(new UserRole() { UserId=guid, RoleName=RoleEnum.manager.ToString()});
+
             return Redirect("/Admin/Manager");
         }
 
 
         public ActionResult Role()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View(service.GetAllRoles());
         }
         [HttpGet("/Admin/Role/add")]
         public ActionResult AddRole()
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             return View();
         }
         [HttpPost("/Admin/Role/add")]
         public ActionResult AddRole(Role roleToSave)
         {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
             logger.LogInformation($"RoleAdd: id={roleToSave.RoleName}");
+            service.SaveItem(roleToSave);
             return Redirect("/Admin/Role");
         }
 

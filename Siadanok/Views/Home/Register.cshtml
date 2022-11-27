@@ -1,31 +1,36 @@
-﻿@page
-@using DataBase.Entity;
-@using Siadanok.Services
-
+﻿@using DataBase.Entity
+@model User
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <main class="form-signin">
 <form action="/Home/Register" method="post" enctype="multipart/form-data">
 
+        </br>
         <h1 class="h3 mb-3 fw-normal">Пожалуйста, зарегистрируйтесь</h1>
         <hr class="my-4">
+
         <div class="form-floating">
-            <input type="text" name="Number" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
-            <label for="floatingInput">Номер телефона</label>
+            <input asp-for="Number" type="text" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+            <label asp-for="Number" for="floatingInput">Номер телефона</label>
+            <span class="badge bg-danger" asp-validation-for="Number"></span>
         </div>
         </br>
         <div class="form-floating">
-            <input type="text" name="Password" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
-            <label for="floatingInput">Пароль</label>
+            <input asp-for="Password" type="text"class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+            <label asp-for="Password" for="floatingInput">Пароль</label>
+            <span class="badge bg-danger" asp-validation-for="Password"></span>
         </div>
         </br>
         <div class="form-floating">
-            <input type="text" name="FirstName" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
-            <label for="floatingInput">Имя</label>
+            <input asp-for="FirstName" type="text" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+            <label asp-for="FirstName" for="floatingInput">Имя</label>
+            <span class="badge bg-danger" asp-validation-for="FirstName"></span>
         </div>
         </br>
         <div class="form-floating">
-            <input type="text" name="SecondName" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
-            <label for="floatingInput">Фамилия</label>
+            <input asp-for="SecondName" type="text" class="form-control" id="floatingInput" placeholder="+37529xxxyyzz">
+            <label asp-for="SecondName" for="floatingInput">Фамилия</label>
+            <span class="badge bg-danger" asp-validation-for="SecondName"></span>
         </div>
         </br>
         <div class="form-group">
