@@ -37,6 +37,11 @@ namespace Siadanok.Controllers
             }
             return View();
         }
+        [HttpGet("/Home/accessdenied")]
+        public IActionResult Deny()
+        {
+            return StatusCode(StatusCodes.Status403Forbidden);
+        }
         [HttpGet]
         public IActionResult Register()
         {
@@ -166,7 +171,20 @@ namespace Siadanok.Controllers
         }
         public IActionResult Privacy()
         {
+            if (Request.Cookies["userId"]!=null)
             ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
+        public IActionResult FeedBack()
+        {
             return View();
         }
         [Authorize(Roles = "user")]

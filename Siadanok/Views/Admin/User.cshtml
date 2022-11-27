@@ -1,6 +1,9 @@
 ﻿@using DataBase.Entity
 @using System.Drawing
 @model List<User>
+@{
+    ViewData["Title"] = "Пользователи";
+}
 @functions {
     public Image ByteArrayToImage(byte[] byteArrayIn)
     {
@@ -36,22 +39,29 @@
         @foreach (var user in Model)
         {
             <div>
-                @{
-                   //var base64 = Convert.ToBase64String(user.Picture);
-                   // var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                }
             <tr>
                 <th scope="row">@user.Id</th>
-                <th>
-                    <img src="" width="25" height="25">
-                </th>
+
+                    @if (user.Picture != null)
+                    {
+
+                        var base64 = Convert.ToBase64String(user.Picture);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+
+                        <th>
+                            <img src="@imgSrc" width="100" height="100">
+                        </th>
+                }else{
+                <th>Картинка отсутствует</th>
+                }
                 <th>@user.Number</th>
                 <th>@user.Password</th>
                 <th>@user.FirstName</th>
                 <th>@user.SecondName</th>
                 <th>
                     <a asp-controller="Admin" asp-action="BanUser" asp-route-userId="@user.Id">
-                        <button type="button" class="btn btn-primary btn-sm">Заблокировать</button>
+                        <button type="button" class="btn btn-primary btn-sm" style="width:200px;">Заблокировать</button>
                     </a>
                 </th>
             </tr>

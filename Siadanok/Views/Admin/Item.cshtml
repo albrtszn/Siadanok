@@ -1,6 +1,9 @@
 ﻿@using DataBase.Entity
 @using System.Drawing
 @model List<Item>
+@{
+    ViewData["Title"] = "Товары";
+}
 @functions {
     public Image ByteArrayToImage(byte[] byteArrayIn)
     {
@@ -50,7 +53,7 @@
                 <th scope="row">@item.Id</th>
                 <th>@item.Name</th>
                 <th>
-                    <img src="@imgSrc" width="50" height="50">
+                    <img src="@imgSrc" style="im" width="100" height="100">
                     </th>
                 <th>@item.Type</th>
                 <th>@item.IsExotic</th>
@@ -58,11 +61,11 @@
                 <th>@item.Price</th>
                 <th>
                     <a asp-controller="Admin" asp-action="EditItem" asp-route-itemId="@item.Id">
-                    <button type="button" class="btn btn-primary btn-sm">Редактировать</button>
+                        <button type="button" class="btn btn-primary btn-sm" style="width:200px;">Редактировать</button>
                     </a>
                     <br></br>
                     <a asp-controller="Admin" asp-action="DeleteItem" asp-route-itemId="@item.Id">
-                        <button type="button" class="btn btn-primary btn-sm">Удалить</button>
+                        <button type="button" class="btn btn-primary btn-sm" style="width:200px;">Удалить</button>
                     </a>
                 </th>
         </tr>

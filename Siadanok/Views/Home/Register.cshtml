@@ -1,6 +1,9 @@
 ﻿@using DataBase.Entity
 @model User
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Регистрация";
+}
 
 <main class="form-signin">
 <form action="/Home/Register" method="post" enctype="multipart/form-data">

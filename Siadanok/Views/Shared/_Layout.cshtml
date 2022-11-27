@@ -35,10 +35,11 @@
                 <a class="nav-link" href="/Home/AboutUs">О нас</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/Home/Contacts">Контакты</a>
+                <a class="nav-link" href="/Home/Contact">Контакты</a>
               </li>
-             
-              
+              <li class="nav-item">
+                <a class="nav-link" href="/Home/Privacy">Соглашение</a>
+              </li>
             </ul>
                 @if (ViewBag.message == null && ViewBag.role ==null)
                 {
@@ -151,7 +152,7 @@
               <a href="#!" class="text-reset">О нас</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">Политика</a>
+              <a href="/Home/Privacy" class="text-reset">Политика</a>
             </p>
           </div>
           <!-- Grid column -->
@@ -182,7 +183,7 @@
     <!-- Copyright -->
     <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
       © 2022 Copyright:
-      <a class="text-reset fw-bold" href="https://mdbootstrap.com/">Сазонов Альберт</a>
+            <a class="text-reset fw-bold" href="https://github.com/albrtszn">Сазонов Альберт</a>
     </div>
     <!-- Copyright -->
   </footer>

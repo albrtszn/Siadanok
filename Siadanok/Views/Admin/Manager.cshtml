@@ -1,6 +1,8 @@
 ﻿@using DataBase.Entity
 @model List<Manager>
-
+@{
+    ViewData["Title"] = "Менеджеры";
+}
 </br>
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/Admin/Index">Home</a></li>
@@ -41,11 +43,11 @@
                 <th>@manager.SecondName</th>
                 <th>
                     <a asp-controller="Admin" asp-action="BanManager" asp-route-managerId="@manager.Id">
-                        <button type="button" class="btn btn-primary btn-sm">Заблокировать</button>
+                        <button type="button" class="btn btn-primary btn-sm" style="width:200px;">Заблокировать</button>
                     </a>
                     <br></br>
                     <a asp-controller="Admin" asp-action="EditManager" asp-route-managerId="@manager.Id">
-                        <button type="button" class="btn btn-primary btn-sm">Изменить</button>
+                        <button type="button" class="btn btn-primary btn-sm" style="width:200px;">Изменить</button>
                     </a>
                 </th>
             </tr>

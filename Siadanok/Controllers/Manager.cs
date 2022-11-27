@@ -76,6 +76,14 @@ namespace Siadanok.Controllers
             }
             return Redirect("/Manager/Item");
         }
+        [HttpPost("/Manager/Item/{itemId}/delete")]
+        public ActionResult DeleteItem(int itemId)
+        {
+            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+            logger.LogInformation($"DeleteItem: id={itemId}");
+            service.DeleteItem(service.GetItemById(itemId));
+            return Redirect("/Admin/Item");
+        }
 
         [HttpGet("/Manager/Item/add")]
         public ActionResult AddItem()
