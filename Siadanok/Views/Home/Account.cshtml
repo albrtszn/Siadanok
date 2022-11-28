@@ -63,27 +63,30 @@
                                     <tbody>
                                         @foreach (var item in Model.ListItems)
                                         {
-                                            <tr>
-                                                <td>@item.Name</td>
-                                                @if (@item.Type.Equals("Meal"))
-                                                {
-                                                    <td>Второе блюдо</td>
-                                                }
-                                                @if (@item.Type.Equals("Soup"))
-                                                {
-                                                    <td>Первое блюдо</td>
-                                                }
-                                                @if (@item.Type.Equals("Drink"))
-                                                {
-                                                    <td>Напитки</td>
-                                                }
-                                                @if (@item.Type.Equals("Dessert"))
-                                                {
-                                                    <td>Дессерт</td>
-                                                }
-                                                <td>@item.Price</td>
-                                            </tr>
-                                        }
+                                    if (item != null)
+                                    {
+                                        <tr>
+                                            <td>@item.Name</td>
+                                            @if (@item.Type.Equals("Meal"))
+                                            {
+                                                <td>Второе блюдо</td>
+                                            }
+                                            @if (@item.Type.Equals("Soup"))
+                                            {
+                                                <td>Первое блюдо</td>
+                                            }
+                                            @if (@item.Type.Equals("Drink"))
+                                            {
+                                                <td>Напитки</td>
+                                            }
+                                            @if (@item.Type.Equals("Dessert"))
+                                            {
+                                                <td>Дессерт</td>
+                                            }
+                                            <td>@item.Price</td>
+                                        </tr>
+                                    }
+                                }
                                     </tbody>
                                 </table>
 

@@ -21,6 +21,7 @@ namespace DataBase
         public DbSet<ReserveOrder> reserveOrderRepo { get; set; }
         public DbSet<Role> roleRepo { get; set; }
         public DbSet<UserRole> userRoleRepo { get; set; }
+        //public DbSet<Comment> commentRepo { get; set; }
 
         public EFDBContext(DbContextOptions<EFDBContext> options) : base(options) { }
 

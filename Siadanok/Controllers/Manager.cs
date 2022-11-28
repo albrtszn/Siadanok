@@ -59,20 +59,26 @@ namespace Siadanok.Controllers
         [HttpPost("/Manager/Item/{itemId}")]
         public ActionResult EditItem(Item itemToSave)
         {
-            //!!!
             ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
-            logger.LogInformation($"EditItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
-                                  $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}");
-            IFormFileCollection files = HttpContext.Request.Form.Files;
-            if (itemToSave.Picture!=null)
+
+            Item item = new Item() { Name = itemToSave.Name, Descryption = itemToSave.Descryption, IsExotic = itemToSave.IsExotic, Type = itemToSave.Type, Price = itemToSave.Price };
+            if (itemToSave.Picture != null)
             {
-                itemToSave.Picture = Service.IFormFileToByteArray(files[0]);
-                service.SaveItem(itemToSave);
+                IFormFileCollection files = HttpContext.Request.Form.Files;
+                foreach (IFormFile file in files)
+                {
+                    logger.LogInformation($"EditItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
+                                      $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}");
+                }
+                item.Picture = Service.IFormFileToByteArray(files[0]);
+                service.DeleteItem(service.GetItemById(itemToSave.Id));
+                service.SaveItem(item);
             }
             else
             {
-                itemToSave.Picture = service.GetItemById(itemToSave.Id).Picture;
-                service.SaveItem(itemToSave);
+                item.Picture = service.GetItemById(itemToSave.Id).Picture;
+                service.DeleteItem(service.GetItemById(itemToSave.Id));
+                service.SaveItem(item);
             }
             return Redirect("/Manager/Item");
         }

@@ -61,15 +61,25 @@ namespace Siadanok.Controllers
         public ActionResult EditItem(Item itemToSave)
         {
             ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
-            IFormFileCollection files = HttpContext.Request.Form.Files;
-            foreach (IFormFile file in files)
-            {
-                logger.LogInformation($"EditItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
-                                  $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}");
-            }
 
-            itemToSave.Picture = Service.IFormFileToByteArray(files[0]);
-            service.SaveItem(itemToSave);
+            Item item = new Item() { Name=itemToSave.Name, Descryption=itemToSave.Descryption, IsExotic=itemToSave.IsExotic, Type=itemToSave.Type, Price=itemToSave.Price};
+            if (itemToSave.Picture != null)
+            {
+                IFormFileCollection files = HttpContext.Request.Form.Files;
+                foreach (IFormFile file in files)
+                {
+                    logger.LogInformation($"EditItem: id={itemToSave.Id}, Name={itemToSave.Name}" +
+                                      $" Type={itemToSave.Type}, IsExotic={itemToSave.IsExotic}");
+                }
+                item.Picture = Service.IFormFileToByteArray(files[0]);
+                service.DeleteItem(service.GetItemById(itemToSave.Id));
+                service.SaveItem(item);
+            }
+            else {
+                item.Picture = service.GetItemById(itemToSave.Id).Picture;
+                service.DeleteItem(service.GetItemById(itemToSave.Id));
+                service.SaveItem(item);
+            }
             return Redirect("/Admin/Item");
         }
         [HttpGet("/Admin/Item/add")]
@@ -134,11 +144,7 @@ namespace Siadanok.Controllers
             ViewBag.firstname = manager.FirstName;
             ViewBag.secondName = manager.SecondName;
 
-            List< DataBase.Entity.Role > roles = service.GetAllRoles().ToList();
-            Role roleToDelete = roles.Find(x=>x.RoleName.Equals("admin"));
-            roles.Remove(roleToDelete);
-
-            return View(roles);
+            return View(service.GetAllRoles().ToList().Where(x => !x.RoleName.Equals("admin")).ToList());
         }
         [HttpPost("/Admin/Manager/{managerId}")]
         public ActionResult EditManager(ManagerModel maangerToSave)
@@ -164,7 +170,7 @@ namespace Siadanok.Controllers
         public ActionResult AddManager()
         {
             ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
-            return View();
+            return View(service.GetAllRoles().ToList().Where(x => !x.RoleName.Equals("admin")).ToList());
         }
         [HttpPost("/Admin/Manager/add")]
         public ActionResult AddManager(DataBase.Entity.Manager maangerToSave)

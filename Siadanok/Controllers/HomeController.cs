@@ -45,6 +45,11 @@ namespace Siadanok.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             return View();
         }
         [HttpPost]
@@ -79,6 +84,11 @@ namespace Siadanok.Controllers
         [HttpGet]
         public IActionResult Login(string? returnUrl)
         {
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             ViewBag.returnUrl = returnUrl;
             return View();
         }
@@ -90,7 +100,7 @@ namespace Siadanok.Controllers
             DataBase.Entity.Admin? admin = service.GetAllAdmins().ToList().Find(x => x.Name.Equals(loginModel.Login));
 
             if (!ModelState.IsValid) {
-                ModelState.AddModelError("Login","error - login");
+                ModelState.AddModelError("Login", "error - login");
             }
 
             var props = new AuthenticationProperties
@@ -108,7 +118,7 @@ namespace Siadanok.Controllers
                     Response.Cookies.Append("userId", user.Id.ToString(), option);
                     //Response.Cookies.Append("cart", null, option);
                     ViewBag.message = Request.Cookies["userId"];
-                    ViewBag.role = service.GetAllUserRoles().ToList().Find(x=>x.UserId.Equals(user.Id)).RoleName;
+                    ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(user.Id)).RoleName;
 
                     var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleEnum.user.ToString()) };
                     // создаем объект ClaimsIdentity
@@ -171,48 +181,89 @@ namespace Siadanok.Controllers
         }
         public IActionResult Privacy()
         {
-            if (Request.Cookies["userId"]!=null)
-            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             return View();
         }
         public IActionResult Contact()
         {
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             return View();
         }
         public IActionResult AboutUs()
         {
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             return View();
         }
+        [HttpGet]
         public IActionResult FeedBack()
         {
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
+            return View();
+        }
+        [HttpPost]
+        public IActionResult FeedBack(Comment comment)
+        {
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
+            comment.Date = DateTime.Now.ToString("dd.MM.yyyy");
             return View();
         }
         [Authorize(Roles = "user")]
         [HttpGet]
         public IActionResult Menu()
         {
-            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
-            ViewBag.message = Request.Cookies["userId"];
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             return View(service.GetAllItems());
         }
         [Authorize(Roles="user")]
         [HttpPost]
         public IActionResult Menu(string sort, string filt)
         {
-            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
 
             List<Item> items = service.GetAllItems().ToList();
             logger.LogInformation($"PostMenu: filt={filt}, sort={sort}");
 
             switch (sort)
             {
-                case "Price":
-                    items.Sort(delegate (Item x, Item y) {
+                case "up":
+                    /*items.Sort(delegate (Item x, Item y) {
                         if (x.Price == null && y.Price == null) return 0;
                         else if (x.Price == null) return -1;
                         else if (y.Price == null) return -1;
                         else return x.Price.CompareTo(y.Price);
-                    });
+                    });*/
+                    items = items.OrderByDescending(x => x.Price).Reverse().ToList();
+                    break;
+                case "down":
+                    items = items.OrderByDescending(x=>x.Price).ToList();
                     break;
                 default:
                     break;
@@ -285,8 +336,11 @@ namespace Siadanok.Controllers
         [Authorize(Roles = "user")]
         public IActionResult Order()
         {
-            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
-            ViewBag.message = Request.Cookies["userId"];
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             return View();
         }
         [HttpPost]
@@ -365,16 +419,22 @@ namespace Siadanok.Controllers
         [Authorize(Roles = "user")]
         public IActionResult Account()
         {
-            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
-            ViewBag.message = Request.Cookies["userId"];
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             return View(service.GetUserModel(Request.Cookies["userId"]));
         }
         [HttpGet]
         [Authorize(Roles = "user")]
         public IActionResult Cart()
         {
-            ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
-            ViewBag.message = Request.Cookies["userId"];
+            if (Request.Cookies["userId"] != null)
+            {
+                ViewBag.role = service.GetAllUserRoles().ToList().Find(x => x.UserId.Equals(Request.Cookies["userId"])).RoleName;
+                ViewBag.message = Request.Cookies["userId"];
+            }
             if (Request.Cookies["cart"] != null) {
                 
                 List<CartItem>? listCart = JsonConvert.DeserializeObject<List<CartItem>>(Request.Cookies["cart"]);

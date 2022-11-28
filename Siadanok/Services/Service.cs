@@ -58,10 +58,15 @@ namespace Siadanok.Services
             dataManager.User.DeleteUser(userToDelete);
         }
         public User GetUserById(string id)
-        {   
+        {
             User user = dataManager.User.GetById(id);
             user.Password = Base64Decode(user.Password);
+            Console.WriteLine($"user-> num:{user.Number}, password={user.Password}");
             return user;
+        }
+        public byte[]? GetUserAvatar(string userId)
+        {
+            return GetAllUsers().ToList().First(x => x.Id.Equals(userId)).Picture;
         }
         public UserModel GetUserModel(string userId)
         {
@@ -96,7 +101,7 @@ namespace Siadanok.Services
         public Manager GetManagerById(string id)
         {
             Manager manager = dataManager.Manager.GetManagerById(id);
-            manager.Password = Base64Decode(manager.Password);
+            //manager.Password = Base64Decode(manager.Password);
             return manager;
         }
         public void SaveManager(Manager managerToSave)
@@ -143,6 +148,7 @@ namespace Siadanok.Services
         }
         public void SaveItem(Item itemToSave)
         {
+            logger.LogInformation($"itemToSave-> id:{itemToSave.Id}, name:{itemToSave.Name}");
             dataManager.Item.SaveItem(itemToSave);
         }
         public List<Item> GetItemsByCartItems(List<CartItem> listCart)

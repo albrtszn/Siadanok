@@ -49,7 +49,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("adminRepo");
+                    b.ToTable("adminRepo", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.CartItem", b =>
@@ -73,7 +73,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("cartItemsRepo");
+                    b.ToTable("cartItemsRepo", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.DeliveryOrder", b =>
@@ -121,7 +121,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("DeliveryId");
 
-                    b.ToTable("deliveryOrderRepo");
+                    b.ToTable("deliveryOrderRepo", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.Item", b =>
@@ -157,7 +157,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("itemRepo");
+                    b.ToTable("itemRepo", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.Manager", b =>
@@ -187,7 +187,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("managerRepo");
+                    b.ToTable("managerRepo", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.Role", b =>
@@ -197,7 +197,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("RoleName");
 
-                    b.ToTable("roleRepo");
+                    b.ToTable("roleRepo", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.User", b =>
@@ -226,7 +226,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("userRepo");
+                    b.ToTable("userRepo", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.UserRole", b =>
@@ -247,7 +247,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("userRoleRepo");
+                    b.ToTable("userRoleRepo", (string)null);
                 });
 
             modelBuilder.Entity("Siadanok.Models.ReserveOrder", b =>
@@ -281,7 +281,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("ReserveId");
 
-                    b.ToTable("reserveOrderRepo");
+                    b.ToTable("reserveOrderRepo", (string)null);
                 });
 #pragma warning restore 612, 618
         }
